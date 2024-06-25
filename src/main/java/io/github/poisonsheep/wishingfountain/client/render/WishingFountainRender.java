@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class WishingFountainRender implements BlockEntityRenderer<WishingFountainEntity> {
 
@@ -32,11 +33,24 @@ public class WishingFountainRender implements BlockEntityRenderer<WishingFountai
             stack.popPose();
         }
     }
+
     @Override
-    public boolean shouldRenderOffScreen(WishingFountainEntity entity) {
+    public boolean shouldRenderOffScreen(@NotNull WishingFountainEntity entity) {
         return true;
     }
 
     private void setTranslateAndPose(WishingFountainEntity entity, PoseStack stack) {
+        stack.translate(0.5, -0.5, 0.5);
+        switch (entity.getDirection()) {
+            case SOUTH:
+                stack.mulPose(Axis.YP.rotationDegrees(90));
+                break;
+            case EAST:
+                stack.mulPose(Axis.YP.rotationDegrees(180));
+                break;
+            case NORTH:
+                stack.mulPose(Axis.YP.rotationDegrees(270));
+                break;
+        }
     }
 }

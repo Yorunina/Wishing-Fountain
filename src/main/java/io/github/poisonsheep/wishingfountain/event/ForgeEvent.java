@@ -4,6 +4,7 @@ import io.github.poisonsheep.wishingfountain.WishingFountain;
 import io.github.poisonsheep.wishingfountain.block.multiblock.IMultiBlock;
 import io.github.poisonsheep.wishingfountain.block.multiblock.MultiBlockManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +26,7 @@ public class ForgeEvent {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         Level worldIn = player.level();
-        System.out.println(worldIn.isClientSide);
+        Direction direction = player.getDirection();
         if (!worldIn.isClientSide && event.phase == TickEvent.Phase.END) {
             List<ItemEntity> itemEntityList = worldIn.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(32.0F));
             for (ItemEntity itemEntity : itemEntityList) {
@@ -43,7 +44,7 @@ public class ForgeEvent {
                                 StructureTemplate targetTemplate = multiBlock.getTemplateTarget((ServerLevel) worldIn);
                                 StructureTemplate structureTemplate = multiBlock.getTemplateStructure((ServerLevel) worldIn);
                                 if (multiBlock.isMatch(worldIn, posStart, targetTemplate)) {
-                                    multiBlock.build(worldIn, posStart, structureTemplate);
+                                    multiBlock.build(worldIn, posStart, structureTemplate, direction);
                                     itemEntity.discard();
                                 }
                             }

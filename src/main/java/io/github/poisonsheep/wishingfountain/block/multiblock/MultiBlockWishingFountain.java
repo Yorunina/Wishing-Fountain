@@ -4,6 +4,7 @@ import io.github.poisonsheep.wishingfountain.WishingFountain;
 import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -56,7 +57,7 @@ public class MultiBlockWishingFountain implements IMultiBlock {
     }
 
     @Override
-    public void build(Level worldIn, BlockPos posStart, StructureTemplate wishingFountain) {
+    public void build(Level worldIn, BlockPos posStart, StructureTemplate wishingFountain, Direction direction) {
         StructureTemplate.Palette palette = wishingFountain.palettes.get(0);
         PosListData posList = new PosListData();
         //记录之前方块的位置
@@ -67,15 +68,11 @@ public class MultiBlockWishingFountain implements IMultiBlock {
             BlockPos currentPos = posStart.offset(blockInfo.pos());
             BlockState currentState = worldIn.getBlockState(currentPos);
             BlockState targetState = blockInfo.state();
-            if(currentState.is(Blocks.WATER)) {
-                worldIn.setBlock(currentPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-            } else {
-                worldIn.setBlock(currentPos, targetState, Block.UPDATE_ALL);
-            }
+            worldIn.setBlock(currentPos, targetState, Block.UPDATE_ALL);
             BlockEntity entity = worldIn.getBlockEntity(currentPos);
             if (entity instanceof WishingFountainEntity) {
                 Boolean isRender = currentPos.equals(posStart.offset(CENTER));
-                ((WishingFountainEntity) entity).setForgeData(isRender, currentState, posList);
+                ((WishingFountainEntity) entity).setForgeData(isRender, currentState, posList, direction);
             }
         }
     }

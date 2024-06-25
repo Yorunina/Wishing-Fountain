@@ -3,10 +3,10 @@ package io.github.poisonsheep.wishingfountain.block;
 import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -30,18 +29,16 @@ import java.util.Optional;
 
 public class WishingFountainBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
-    public static final IntegerProperty FOUNTAIN = IntegerProperty.create("fountain", 1, 4);
+    public static final IntegerProperty FOUNTAIN = IntegerProperty.create("fountain", 1, 2);
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     protected static final VoxelShape DEFAULT_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
 
     public WishingFountainBlock() {
         super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
-        this.registerDefaultState(this.stateDefinition.any().setValue(FOUNTAIN, Integer.valueOf(1)).setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FOUNTAIN, Integer.valueOf(1)).setValue(WATERLOGGED, Boolean.valueOf(false)));
     }
 
     @Nullable
@@ -62,7 +59,8 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
         if (!worldIn.isClientSide) {
             this.getEntity(worldIn, pos).ifPresent(entity -> {
                 this.restoreStorageBlock(worldIn, pos, entity.getBlockPosList());
-                if (!player.isCreative()) {
+                ItemStack mainHandItem = player.getMainHandItem();
+                if (!player.isCreative() && mainHandItem.getItem() instanceof PickaxeItem) {
                     Block block = entity.getStorageState().getBlock();
                     Block.popResource(worldIn, pos, new ItemStack(block));
                 }
@@ -81,12 +79,12 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
-        stateBuilder.add(FOUNTAIN, FACING, WATERLOGGED);
+        stateBuilder.add(FOUNTAIN, WATERLOGGED);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-        if(state.getValue(FOUNTAIN) == 3) {
+        if(state.getValue(FOUNTAIN) == 2) {
             return BOTTOM_AABB;
         }
         return DEFAULT_SHAPE;
@@ -99,7 +97,7 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
 
     @Override
     public boolean canPlaceLiquid(BlockGetter getter, BlockPos pos, BlockState state, Fluid fluid) {
-        if(!(state.getValue(FOUNTAIN) == 3)) {
+        if(!(state.getValue(FOUNTAIN) == 2)) {
             return false;
         }
         return SimpleWaterloggedBlock.super.canPlaceLiquid(getter, pos, state, fluid);
@@ -107,7 +105,7 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
 
     @Override
     public ItemStack pickupBlock(LevelAccessor accessor, BlockPos pos, BlockState state) {
-        if(state.getValue(FOUNTAIN) == 3) {
+        if(state.getValue(FOUNTAIN) == 2) {
             return new ItemStack(Items.WATER_BUCKET);
         }
         return ItemStack.EMPTY;
