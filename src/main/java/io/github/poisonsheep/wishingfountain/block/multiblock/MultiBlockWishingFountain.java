@@ -1,0 +1,102 @@
+package io.github.poisonsheep.wishingfountain.block.multiblock;
+
+import io.github.poisonsheep.wishingfountain.WishingFountain;
+import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
+import io.github.poisonsheep.wishingfountain.util.PosListData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class MultiBlockWishingFountain implements IMultiBlock {
+
+    private static final ResourceLocation WISHING_FOUNTAIN_TARGET = new ResourceLocation(WishingFountain.MODID, "wishing_fountain_target");
+
+    private static final ResourceLocation WISHING_FOUNTAIN_STRUCTURE = new ResourceLocation(WishingFountain.MODID, "wishing_fountain_structure");
+
+    //喷泉中心相对于初始位置的坐标
+    private static final BlockPos CENTER = new BlockPos(2, 2 ,2);
+    //列出喷泉底部八个方块相对坐标列表
+    private static final List<BlockPos> BOTTOM = Arrays.asList(
+            new BlockPos(1, 0, 1),
+            new BlockPos(2, 0, 1),
+            new BlockPos(3, 0, 1),
+            new BlockPos(3, 0, 2),
+            new BlockPos(3, 0, 3),
+            new BlockPos(2, 0, 3),
+            new BlockPos(1, 0, 3),
+            new BlockPos(1, 0, 2)
+    );
+
+
+    @Override
+    public boolean isCoreBlock(BlockState blockState) {
+        return blockState.is(Blocks.QUARTZ_SLAB);
+    }
+
+    @Override
+    public boolean isMatch(Level world, BlockPos posStart, StructureTemplate target) {
+        StructureTemplate.Palette palette = target.palettes.get(0);
+        for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
+            BlockState worldState = world.getBlockState(posStart.offset(blockInfo.pos()));
+            BlockState infoState = blockInfo.state();
+            if (!worldState.equals(infoState)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void build(Level worldIn, BlockPos posStart, StructureTemplate wishingFountain) {
+        StructureTemplate.Palette palette = wishingFountain.palettes.get(0);
+        PosListData posList = new PosListData();
+        //记录之前方块的位置
+        for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
+            posList.add(posStart.offset(blockInfo.pos()));
+        }
+        for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
+            BlockPos currentPos = posStart.offset(blockInfo.pos());
+            BlockState currentState = worldIn.getBlockState(currentPos);
+            BlockState targetState = blockInfo.state();
+            if(currentState.is(Blocks.WATER)) {
+                worldIn.setBlock(currentPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            } else {
+                worldIn.setBlock(currentPos, targetState, Block.UPDATE_ALL);
+            }
+            BlockEntity entity = worldIn.getBlockEntity(currentPos);
+            if (entity instanceof WishingFountainEntity) {
+                Boolean isRender = currentPos.equals(posStart.offset(CENTER));
+                ((WishingFountainEntity) entity).setForgeData(isRender, currentState, posList);
+            }
+        }
+    }
+
+    @Override
+    public List<BlockPos> getBottomPos() {
+        return BOTTOM;
+    }
+
+    @Override
+    public StructureTemplate getTemplateStructure(ServerLevel world) {
+        return getWishingFountainTemplate(world, WISHING_FOUNTAIN_STRUCTURE);
+    }
+
+    @Override
+    public StructureTemplate getTemplateTarget(ServerLevel world) {
+        return getWishingFountainTemplate(world, WISHING_FOUNTAIN_TARGET);
+    }
+
+    private StructureTemplate getWishingFountainTemplate(ServerLevel world, ResourceLocation location) {
+        return world.getStructureManager().getOrCreate(location);
+    }
+
+}

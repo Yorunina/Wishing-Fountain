@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "fountain=1": {
+      "model": "wishing_fountain:block/wishing_fountain_bottom1"
+    },
+    "fountain=2,facing=west": {
+      "model": "wishing_fountain:block/wishing_fountain_bottom2",
+      "y": 180
+    },
+    "fountain=2,facing=north": {
+      "model": "wishing_fountain:block/wishing_fountain_bottom2",
+      "y": 270
+    },
+    "fountain=2,facing=east": {
+      "model": "wishing_fountain:block/wishing_fountain_bottom2",
+      "y": 0
+    },
+    "fountain=2,facing=south": {
+      "model": "wishing_fountain:block/wishing_fountain_bottom2",
+      "y": 90
+    },
+    "fountain=3": {
+      "model": "wishing_fountain:block/wishing_fountain_bottom3"
+    },
+    "fountain=4": {
+      "model": "wishing_fountain:block/wishing_fountain_bottom4"
+    }
+  }
+}
