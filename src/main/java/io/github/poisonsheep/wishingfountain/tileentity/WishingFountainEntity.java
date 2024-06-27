@@ -9,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -24,6 +26,7 @@ import javax.annotation.Nullable;
 public class WishingFountainEntity extends BlockEntity {
 
     public static final BlockEntityType<WishingFountainEntity> TYPE = BlockEntityType.Builder.of(WishingFountainEntity::new, BlockRegistry.WISHING_FOUNTAIN.get()).build(null);
+    private static final String STORAGE_ITEM = "StorageItem";
     private static final String STORAGE_STATE_ID = "StorageBlockStateId";
     private static final String STORAGE_BLOCK_LIST = "StorageBlockList";
     private static final String IS_RENDER = "IsRender";
@@ -32,6 +35,7 @@ public class WishingFountainEntity extends BlockEntity {
     private PosListData blockPosList = new PosListData();
     private boolean isRender = false;
     private Direction direction = Direction.SOUTH;
+    public final ItemStackHandler handler = new ItemStackHandler(16);
 
     public WishingFountainEntity(BlockPos pos, BlockState state) {
         super(TYPE, pos, state);
@@ -55,6 +59,7 @@ public class WishingFountainEntity extends BlockEntity {
 
     @Override
     public void saveAdditional(CompoundTag compound) {
+        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT());
         getPersistentData().putBoolean(IS_RENDER, isRender);
         getPersistentData().putInt(STORAGE_STATE_ID, Block.getId(storageState));
         getPersistentData().put(STORAGE_BLOCK_LIST, blockPosList.serialize());
@@ -65,10 +70,15 @@ public class WishingFountainEntity extends BlockEntity {
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
+        handler.deserializeNBT(getPersistentData().getCompound(STORAGE_ITEM));
         isRender = getPersistentData().getBoolean(IS_RENDER);
         storageState = Block.stateById(getPersistentData().getInt(STORAGE_STATE_ID));
         blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_COMPOUND));
         direction = Direction.byName(getPersistentData().getString(DIRECTION));
+    }
+
+    public ItemStack getStorageItem() {
+        return handler.getStackInSlot(0);
     }
 
     public void refresh() {

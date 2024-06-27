@@ -45,7 +45,12 @@ public class ForgeEvent {
                                 StructureTemplate structureTemplate = multiBlock.getTemplateStructure((ServerLevel) worldIn);
                                 if (multiBlock.isMatch(worldIn, posStart, targetTemplate)) {
                                     multiBlock.build(worldIn, posStart, structureTemplate, direction);
-                                    itemEntity.discard();
+                                    ItemStack stack = itemEntity.getItem();
+                                    stack.shrink(1);
+                                    itemEntity.setItem(stack);
+                                    if (stack.isEmpty()) {
+                                        itemEntity.discard();
+                                    }
                                 }
                             }
                         }

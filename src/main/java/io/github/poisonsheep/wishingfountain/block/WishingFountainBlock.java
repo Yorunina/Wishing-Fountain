@@ -3,11 +3,15 @@ package io.github.poisonsheep.wishingfountain.block;
 import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -21,8 +25,10 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -55,6 +61,54 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
     }
 
     @Override
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        return this.getEntity(worldIn, pos).filter(wishingFountain -> handIn == InteractionHand.MAIN_HAND).map(wishingFountain -> {
+            if (player.isShiftKeyDown() || player.getMainHandItem().isEmpty()) {
+                takeOutItem(worldIn, wishingFountain, player);
+            } else {
+                takeInItem(worldIn, wishingFountain, player);
+            }
+            wishingFountain.refresh();
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        }).orElse(super.use(state, worldIn, pos, player, handIn, hit));
+    }
+
+    private void takeOutItem(Level worldIn, WishingFountainEntity altar, Player player) {
+        ItemStack stackInSlot = altar.handler.getStackInSlot(0);
+        if (!stackInSlot.isEmpty()) {
+            int count = Math.min(stackInSlot.getCount(), 16);
+            ItemStack extractItem = altar.handler.extractItem(0, count, false);
+            ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+        }
+    }
+
+
+    private void takeInItem(Level worldIn, WishingFountainEntity altar, Player playerIn) {
+        ItemStack handStack = playerIn.getMainHandItem();
+        if (altar.handler.getStackInSlot(0).isEmpty() && !handStack.isEmpty()) {
+            int count = Math.min(handStack.getCount(), 16);
+            altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(handStack, count));
+            if (!playerIn.isCreative()) {
+                handStack.shrink(count);
+            }
+        }
+    }
+
+
+    @Override
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!worldIn.isClientSide) {
+            this.getEntity(worldIn, pos).ifPresent(altar -> {
+                ItemStack stack = altar.handler.getStackInSlot(0);
+                if (!stack.isEmpty()) {
+                    Block.popResource(worldIn, pos.offset(0, 1, 0), stack);
+                }
+            });
+        }
+        super.onRemove(state, worldIn, pos, newState, isMoving);
+    }
+
+    @Override
     public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide) {
             this.getEntity(worldIn, pos).ifPresent(entity -> {
@@ -69,6 +123,14 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
         super.playerWillDestroy(worldIn, pos, state, player);
     }
 
+    @Override
+    public void onBlockExploded(BlockState state, Level worldIn, BlockPos pos, Explosion explosion) {
+        if (!worldIn.isClientSide) {
+            this.getEntity(worldIn, pos).ifPresent(altar -> this.restoreStorageBlock(worldIn, pos, altar.getBlockPosList()));
+        }
+        super.onBlockExploded(state, worldIn, pos, explosion);
+    }
+
     private void restoreStorageBlock(Level worldIn, BlockPos currentPos, PosListData posList) {
         for (BlockPos storagePos : posList.getData()) {
             if (storagePos.equals(currentPos)) {
@@ -77,6 +139,7 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
             this.getEntity(worldIn, storagePos).ifPresent(entity -> worldIn.setBlock(storagePos, entity.getStorageState(), Block.UPDATE_ALL));
         }
     }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
         stateBuilder.add(FOUNTAIN, WATERLOGGED);
@@ -110,8 +173,15 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
         }
         return ItemStack.EMPTY;
     }
+
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entity) {
+        super.updateEntityAfterFallOn(worldIn, entity);
+
     }
 }
