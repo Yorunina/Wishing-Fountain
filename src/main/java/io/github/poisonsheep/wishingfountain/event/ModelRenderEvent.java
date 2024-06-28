@@ -1,7 +1,7 @@
 package io.github.poisonsheep.wishingfountain.event;
 
 import io.github.poisonsheep.wishingfountain.WishingFountain;
-import io.github.poisonsheep.wishingfountain.client.model.WishingFountainModel;
+import io.github.poisonsheep.wishingfountain.client.model.tileentity.WishingFountainModel;
 import io.github.poisonsheep.wishingfountain.client.render.WishingFountainRender;
 import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;

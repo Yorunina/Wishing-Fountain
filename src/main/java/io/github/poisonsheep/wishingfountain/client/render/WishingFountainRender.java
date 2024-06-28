@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.github.poisonsheep.wishingfountain.WishingFountain;
-import io.github.poisonsheep.wishingfountain.client.model.WishingFountainModel;
+import io.github.poisonsheep.wishingfountain.client.model.tileentity.WishingFountainModel;
 import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,9 +18,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 
 public class WishingFountainRender implements BlockEntityRenderer<WishingFountainEntity> {
 
@@ -46,14 +43,22 @@ public class WishingFountainRender implements BlockEntityRenderer<WishingFountai
             poseStack.popPose();
         }
         if (!entity.handler.getStackInSlot(0).isEmpty()) {
+            ItemStack stack = entity.handler.getStackInSlot(0);
             long r = entity.getBlockPos().asLong();
             RandomSource rand = RandomSource.create(r);
-            AtomicInteger i = new AtomicInteger();
-            renderCookies(itemRenderer, poseStack, source, rand, combinedLightIn, combinedOverlayIn,
-                    () -> {
-                        int j = i.getAndIncrement();
-                        return j < entity.handler.getSlots() ? entity.handler.getStackInSlot(0) : ItemStack.EMPTY;
-                    });
+            poseStack.pushPose();
+            poseStack.translate(0.5, 0.5, 0.5);
+            poseStack.mulPose(Axis.XN.rotationDegrees(90));
+            float scale = 8f / 14f;
+            poseStack.scale(scale, scale, scale);
+            for (int i = 0; i < stack.getCount(); i++) {
+                poseStack.mulPose(Axis.ZP.rotationDegrees(rand.nextInt(360)));
+                poseStack.translate(0, 0, 0.5 / (16f * scale));
+                BakedModel model = itemRenderer.getModel(stack, null, null, 0);
+                itemRenderer.render(stack, ItemDisplayContext.FIXED, true, poseStack, source, combinedLightIn,
+                        combinedOverlayIn, model);
+            }
+            poseStack.popPose();
         }
     }
 
@@ -74,28 +79,6 @@ public class WishingFountainRender implements BlockEntityRenderer<WishingFountai
             case NORTH:
                 stack.mulPose(Axis.YP.rotationDegrees(270));
                 break;
-        }
-    }
-
-    public static void renderCookies(ItemRenderer itemRenderer, PoseStack poseStack, MultiBufferSource buffer, RandomSource rand,
-                                     int light, int overlay, Supplier<ItemStack> itemIterator) {
-
-        ItemStack cookieStack = itemIterator.get();
-        if (!cookieStack.isEmpty()) {
-            poseStack.pushPose();
-            poseStack.translate(0.5, 0.5, 0.5);
-            poseStack.mulPose(Axis.XN.rotationDegrees(90));
-            float scale = 8f / 14f;
-            poseStack.scale(scale, scale, scale);
-            do {
-                poseStack.mulPose(Axis.ZP.rotationDegrees(rand.nextInt(360)));
-                poseStack.translate(0, 0, 1 / (16f * scale));
-                BakedModel model = itemRenderer.getModel(cookieStack, null, null, 0);
-                itemRenderer.render(cookieStack, ItemDisplayContext.FIXED, true, poseStack, buffer, light,
-                        overlay, model);
-                cookieStack = itemIterator.get();
-            } while (!cookieStack.isEmpty());
-            poseStack.popPose();
         }
     }
 }

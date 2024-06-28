@@ -10,6 +10,5 @@ import net.minecraftforge.registries.RegistryObject;
 public class BlockEntityRegistry {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, WishingFountain.MODID);
 
-
     public static final RegistryObject<BlockEntityType<WishingFountainEntity>> WISHING_FOUNTAIN_ENTITY = BLOCK_ENTITY.register("wishing_fountain_entity", ()-> WishingFountainEntity.TYPE);
 }

@@ -63,35 +63,42 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         return this.getEntity(worldIn, pos).filter(wishingFountain -> handIn == InteractionHand.MAIN_HAND).map(wishingFountain -> {
-            if (player.isShiftKeyDown() || player.getMainHandItem().isEmpty()) {
-                takeOutItem(worldIn, wishingFountain, player);
-            } else {
-                takeInItem(worldIn, wishingFountain, player);
+            if (wishingFountain.isCanPlaceItem()) {
+                if (player.getMainHandItem().isEmpty()) {
+                    takeOutItem(worldIn, wishingFountain, player);
+                } else {
+                    takeInItem(worldIn, wishingFountain, player);
+                }
+                wishingFountain.refresh();
             }
-            wishingFountain.refresh();
             return InteractionResult.sidedSuccess(worldIn.isClientSide);
         }).orElse(super.use(state, worldIn, pos, player, handIn, hit));
     }
 
-    private void takeOutItem(Level worldIn, WishingFountainEntity altar, Player player) {
-        ItemStack stackInSlot = altar.handler.getStackInSlot(0);
-        if (!stackInSlot.isEmpty()) {
-            int count = Math.min(stackInSlot.getCount(), 16);
-            ItemStack extractItem = altar.handler.extractItem(0, count, false);
-            ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+    private void takeOutItem(Level worldIn, WishingFountainEntity wishingFountain, Player player) {
+        ItemStack stack = wishingFountain.handler.getStackInSlot(0);
+        if(!stack.isEmpty()) {
+            if (player.isShiftKeyDown()) {
+                ItemStack extractItem = wishingFountain.handler.extractItem(0, stack.getCount(), false);
+                ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+            } else {
+                ItemStack extractItem = wishingFountain.handler.extractItem(0, 1, false);
+                ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+            }
         }
     }
 
-
-    private void takeInItem(Level worldIn, WishingFountainEntity altar, Player playerIn) {
-        ItemStack handStack = playerIn.getMainHandItem();
-        if (altar.handler.getStackInSlot(0).isEmpty() && !handStack.isEmpty()) {
-            int count = Math.min(handStack.getCount(), 16);
-            altar.handler.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(handStack, count));
-            if (!playerIn.isCreative()) {
-                handStack.shrink(count);
-            }
+    private void takeInItem(Level worldIn, WishingFountainEntity wishingFountain, Player playerIn) {
+        ItemStack playerItem = playerIn.getMainHandItem();
+        ItemStack altarItem = wishingFountain.handler.getStackInSlot(0);
+        if (!altarItem.isEmpty() && !altarItem.getItem().equals(playerItem.getItem())) {
+            return;
         }
+        if (altarItem.getCount() >= 8) {
+            return;
+        }
+        wishingFountain.handler.insertItem(0, new ItemStack(playerItem.getItem(), 1), false);
+        playerItem.shrink(1);
     }
 
 

@@ -31,50 +31,55 @@ public class WishingFountainEntity extends BlockEntity {
     private static final String STORAGE_BLOCK_LIST = "StorageBlockList";
     private static final String IS_RENDER = "IsRender";
     private static final String DIRECTION = "Direction";
+    private static final String CAN_PLACE_ITEM = "CanPlaceItem";
     private BlockState storageState = Blocks.AIR.defaultBlockState();
     private PosListData blockPosList = new PosListData();
     private boolean isRender = false;
     private Direction direction = Direction.SOUTH;
-    public final ItemStackHandler handler = new ItemStackHandler(16);
+    private boolean canPlaceItem = false;
+    public final ItemStackHandler handler = new ItemStackHandler(1);
 
     public WishingFountainEntity(BlockPos pos, BlockState state) {
         super(TYPE, pos, state);
-
     }
 
     public BlockState getStorageState() {
         return storageState;
     }
+
     public PosListData getBlockPosList() {
         return blockPosList;
     }
 
-    public void setForgeData(Boolean isRender, BlockState storageState, PosListData blockPosList, Direction direction) {
+    public void setForgeData(boolean isRender, boolean canPlaceItem, BlockState storageState, Direction direction, PosListData blockPosList) {
         this.isRender = isRender;
+        this.canPlaceItem = canPlaceItem;
         this.storageState = storageState;
-        this.blockPosList = blockPosList;
         this.direction = direction;
+        this.blockPosList = blockPosList;
         refresh();
     }
 
     @Override
     public void saveAdditional(CompoundTag compound) {
-        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT());
         getPersistentData().putBoolean(IS_RENDER, isRender);
+        getPersistentData().putBoolean(CAN_PLACE_ITEM, canPlaceItem);
         getPersistentData().putInt(STORAGE_STATE_ID, Block.getId(storageState));
-        getPersistentData().put(STORAGE_BLOCK_LIST, blockPosList.serialize());
         getPersistentData().putString(DIRECTION, direction.getSerializedName());
+        getPersistentData().put(STORAGE_BLOCK_LIST, blockPosList.serialize());
+        getPersistentData().put(STORAGE_ITEM, handler.serializeNBT());
         super.saveAdditional(compound);
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        handler.deserializeNBT(getPersistentData().getCompound(STORAGE_ITEM));
         isRender = getPersistentData().getBoolean(IS_RENDER);
+        canPlaceItem = getPersistentData().getBoolean(CAN_PLACE_ITEM);
         storageState = Block.stateById(getPersistentData().getInt(STORAGE_STATE_ID));
-        blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_COMPOUND));
         direction = Direction.byName(getPersistentData().getString(DIRECTION));
+        blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_COMPOUND));
+        handler.deserializeNBT(getPersistentData().getCompound(STORAGE_ITEM));
     }
 
     public ItemStack getStorageItem() {
@@ -91,13 +96,16 @@ public class WishingFountainEntity extends BlockEntity {
     public boolean isRender() {
         return isRender;
     }
+    public boolean isCanPlaceItem() {
+        return canPlaceItem;
+    }
 
     public Direction getDirection() {return direction;}
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition.offset(-9, -5, -9), worldPosition.offset(9, 5, 9));
+        return new AABB(worldPosition.offset(-3, -2, -3), worldPosition.offset(3, 2, 3));
     }
 
     @NotNull

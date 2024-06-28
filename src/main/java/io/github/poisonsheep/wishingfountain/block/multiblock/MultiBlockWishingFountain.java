@@ -1,6 +1,7 @@
 package io.github.poisonsheep.wishingfountain.block.multiblock;
 
 import io.github.poisonsheep.wishingfountain.WishingFountain;
+import io.github.poisonsheep.wishingfountain.block.WishingFountainBlock;
 import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
@@ -71,8 +72,9 @@ public class MultiBlockWishingFountain implements IMultiBlock {
             worldIn.setBlock(currentPos, targetState, Block.UPDATE_ALL);
             BlockEntity entity = worldIn.getBlockEntity(currentPos);
             if (entity instanceof WishingFountainEntity) {
-                Boolean isRender = currentPos.equals(posStart.offset(CENTER));
-                ((WishingFountainEntity) entity).setForgeData(isRender, currentState, posList, direction);
+                boolean isRender = currentPos.equals(posStart.offset(CENTER));
+                boolean cnPlaceItem = targetState.getValue(WishingFountainBlock.FOUNTAIN).equals(2);
+                ((WishingFountainEntity) entity).setForgeData(isRender, cnPlaceItem, currentState, direction, posList);
             }
         }
     }
