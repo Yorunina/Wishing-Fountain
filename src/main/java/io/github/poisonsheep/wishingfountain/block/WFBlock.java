@@ -1,8 +1,12 @@
 package io.github.poisonsheep.wishingfountain.block;
 
-import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
+import io.github.poisonsheep.wishingfountain.inventory.WFRecipeInventory;
+import io.github.poisonsheep.wishingfountain.recipe.WFRecipe;
+import io.github.poisonsheep.wishingfountain.registry.RecipeRegistry;
+import io.github.poisonsheep.wishingfountain.tileentity.WFEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -31,9 +35,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
-public class WishingFountainBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
+public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
     public static final IntegerProperty FOUNTAIN = IntegerProperty.create("fountain", 1, 2);
 
@@ -42,7 +47,7 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
     protected static final VoxelShape DEFAULT_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
 
-    public WishingFountainBlock() {
+    public WFBlock() {
         super(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2, 2).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(FOUNTAIN, Integer.valueOf(1)).setValue(WATERLOGGED, Boolean.valueOf(false)));
     }
@@ -50,12 +55,12 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new WishingFountainEntity(pos, state);
+        return new WFEntity(pos, state);
     }
-    protected Optional<WishingFountainEntity> getEntity(BlockGetter world, BlockPos pos) {
+    protected Optional<WFEntity> getEntity(BlockGetter world, BlockPos pos) {
         BlockEntity te = world.getBlockEntity(pos);
-        if (te instanceof WishingFountainEntity) {
-            return Optional.of((WishingFountainEntity) te);
+        if (te instanceof WFEntity) {
+            return Optional.of((WFEntity) te);
         }
         return Optional.empty();
     }
@@ -75,7 +80,7 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
         }).orElse(super.use(state, worldIn, pos, player, handIn, hit));
     }
 
-    private void takeOutItem(Level worldIn, WishingFountainEntity wishingFountain, Player player) {
+    private void takeOutItem(Level worldIn, WFEntity wishingFountain, Player player) {
         ItemStack stack = wishingFountain.handler.getStackInSlot(0);
         if(!stack.isEmpty()) {
             if (player.isShiftKeyDown()) {
@@ -85,22 +90,19 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
                 ItemStack extractItem = wishingFountain.handler.extractItem(0, 1, false);
                 ItemHandlerHelper.giveItemToPlayer(player, extractItem);
             }
+            craft(worldIn, wishingFountain, player);
         }
     }
 
-    private void takeInItem(Level worldIn, WishingFountainEntity wishingFountain, Player playerIn) {
+    private void takeInItem(Level worldIn, WFEntity wishingFountain, Player playerIn) {
         ItemStack playerItem = playerIn.getMainHandItem();
-        ItemStack altarItem = wishingFountain.handler.getStackInSlot(0);
-        if (!altarItem.isEmpty() && !altarItem.getItem().equals(playerItem.getItem())) {
-            return;
+        ItemStack stack = wishingFountain.handler.getStackInSlot(0);
+        if ((stack.isEmpty() || stack.getItem().equals(playerItem.getItem())) && stack.getCount() < 8) {
+            wishingFountain.handler.insertItem(0, new ItemStack(playerItem.getItem(), 1), false);
+            playerItem.shrink(1);
+            craft(worldIn, wishingFountain, playerIn);
         }
-        if (altarItem.getCount() >= 8) {
-            return;
-        }
-        wishingFountain.handler.insertItem(0, new ItemStack(playerItem.getItem(), 1), false);
-        playerItem.shrink(1);
     }
-
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
@@ -147,6 +149,41 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
         }
     }
 
+    private void craft(Level worldIn, WFEntity entity, Player player) {
+        final WFRecipeInventory inv = new WFRecipeInventory();
+        List<BlockPos> posList = entity.getBlockPosList().getData();
+        int j = 0;
+        for (int i = 0; i < posList.size(); i++) {
+            BlockEntity te = worldIn.getBlockEntity(posList.get(i));
+            if (te instanceof WFEntity wfEntity) {
+                if(wfEntity.isCanPlaceItem()) {
+                    inv.setItem(j, wfEntity.getStorageItem());
+                    j++;
+                }
+            }
+        }
+        worldIn.getRecipeManager().getAllRecipesFor(RecipeRegistry.WF_RECIPE_TYPE).stream().filter(r -> r.matches(inv, worldIn)).findFirst().ifPresent(r -> spawnResultEntity(worldIn, player, r, inv, entity));
+    }
+
+    private void spawnResultEntity(Level world, Player player, WFRecipe recipe, WFRecipeInventory inv, WFEntity entity) {
+        BlockPos centrePos = player.getOnPos();
+        if (world instanceof ServerLevel) {
+            recipe.spawnOutputEntity((ServerLevel) world, centrePos.above(2), inv);
+        }
+    }
+
+    private BlockPos getCentrePos(PosListData posList, BlockPos posClick) {
+        int x = 0;
+        int y = posClick.getY() - 2;
+        int z = 0;
+        for (BlockPos pos : posList.getData()) {
+            if (pos.getY() == y) {
+                x += pos.getX();
+                z += pos.getZ();
+            }
+        }
+        return new BlockPos(x / 8, y, z / 8);
+    }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
         stateBuilder.add(FOUNTAIN, WATERLOGGED);
@@ -189,6 +226,5 @@ public class WishingFountainBlock extends Block implements EntityBlock, SimpleWa
     @Override
     public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entity) {
         super.updateEntityAfterFallOn(worldIn, entity);
-
     }
 }

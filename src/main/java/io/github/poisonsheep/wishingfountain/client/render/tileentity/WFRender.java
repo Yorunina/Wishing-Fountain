@@ -1,11 +1,11 @@
-package io.github.poisonsheep.wishingfountain.client.render;
+package io.github.poisonsheep.wishingfountain.client.render.tileentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.github.poisonsheep.wishingfountain.WishingFountain;
-import io.github.poisonsheep.wishingfountain.client.model.tileentity.WishingFountainModel;
-import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
+import io.github.poisonsheep.wishingfountain.client.model.tileentity.WFModel;
+import io.github.poisonsheep.wishingfountain.tileentity.WFEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -19,21 +19,21 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class WishingFountainRender implements BlockEntityRenderer<WishingFountainEntity> {
+public class WFRender implements BlockEntityRenderer<WFEntity> {
 
     private final ItemRenderer itemRenderer;
 
-    private final WishingFountainModel MODEL;
+    private final WFModel MODEL;
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(WishingFountain.MODID, "textures/entity/wishing_fountain.png");
 
-    public WishingFountainRender(BlockEntityRendererProvider.Context render) {
-        MODEL = new WishingFountainModel(render.bakeLayer(WishingFountainModel.LAYER_LOCATION));
+    public WFRender(BlockEntityRendererProvider.Context render) {
+        MODEL = new WFModel(render.bakeLayer(WFModel.LAYER_LOCATION));
         Minecraft minecraft = Minecraft.getInstance();
         itemRenderer = minecraft.getItemRenderer();
     }
     @Override
-    public void render(WishingFountainEntity entity, float partialTicks, PoseStack poseStack, MultiBufferSource source, int combinedLightIn, int combinedOverlayIn) {
+    public void render(WFEntity entity, float partialTicks, PoseStack poseStack, MultiBufferSource source, int combinedLightIn, int combinedOverlayIn) {
         if(entity.isRender()) {
             poseStack.pushPose();
             this.setTranslateAndPose(entity, poseStack);
@@ -63,11 +63,11 @@ public class WishingFountainRender implements BlockEntityRenderer<WishingFountai
     }
 
     @Override
-    public boolean shouldRenderOffScreen(@NotNull WishingFountainEntity entity) {
+    public boolean shouldRenderOffScreen(@NotNull WFEntity entity) {
         return true;
     }
 
-    private void setTranslateAndPose(WishingFountainEntity entity, PoseStack stack) {
+    private void setTranslateAndPose(WFEntity entity, PoseStack stack) {
         stack.translate(0.5, -0.5, 0.5);
         switch (entity.getDirection()) {
             case SOUTH:

@@ -3,9 +3,7 @@ package io.github.poisonsheep.wishingfountain;
 
 import io.github.poisonsheep.wishingfountain.block.multiblock.MultiBlockManager;
 import io.github.poisonsheep.wishingfountain.event.ForgeEvent;
-import io.github.poisonsheep.wishingfountain.registry.BlockEntityRegistry;
-import io.github.poisonsheep.wishingfountain.registry.BlockRegistry;
-import io.github.poisonsheep.wishingfountain.registry.ItemRegistry;
+import io.github.poisonsheep.wishingfountain.registry.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -32,6 +30,8 @@ public class WishingFountain {
         ItemRegistry.ITEMS.register(modBusEvent);
         BlockRegistry.BLOCKS.register(modBusEvent);
         BlockEntityRegistry.BLOCK_ENTITY.register(modBusEvent);
+        SoundRegistry.SOUNDS.register(modBusEvent);
+        RecipeRegistry.DEF_REG.register(modBusEvent);
     }
     private void setup(final FMLCommonSetupEvent event) {}
 

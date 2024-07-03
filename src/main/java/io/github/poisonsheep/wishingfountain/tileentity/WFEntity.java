@@ -23,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class WishingFountainEntity extends BlockEntity {
+public class WFEntity extends BlockEntity {
 
-    public static final BlockEntityType<WishingFountainEntity> TYPE = BlockEntityType.Builder.of(WishingFountainEntity::new, BlockRegistry.WISHING_FOUNTAIN.get()).build(null);
+    public static final BlockEntityType<WFEntity> TYPE = BlockEntityType.Builder.of(WFEntity::new, BlockRegistry.WISHING_FOUNTAIN.get()).build(null);
     private static final String STORAGE_ITEM = "StorageItem";
     private static final String STORAGE_STATE_ID = "StorageBlockStateId";
     private static final String STORAGE_BLOCK_LIST = "StorageBlockList";
@@ -39,7 +39,7 @@ public class WishingFountainEntity extends BlockEntity {
     private boolean canPlaceItem = false;
     public final ItemStackHandler handler = new ItemStackHandler(1);
 
-    public WishingFountainEntity(BlockPos pos, BlockState state) {
+    public WFEntity(BlockPos pos, BlockState state) {
         super(TYPE, pos, state);
     }
 

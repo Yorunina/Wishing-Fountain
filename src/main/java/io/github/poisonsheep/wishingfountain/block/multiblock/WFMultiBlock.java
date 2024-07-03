@@ -1,13 +1,15 @@
 package io.github.poisonsheep.wishingfountain.block.multiblock;
 
 import io.github.poisonsheep.wishingfountain.WishingFountain;
-import io.github.poisonsheep.wishingfountain.block.WishingFountainBlock;
-import io.github.poisonsheep.wishingfountain.tileentity.WishingFountainEntity;
+import io.github.poisonsheep.wishingfountain.block.WFBlock;
+import io.github.poisonsheep.wishingfountain.registry.SoundRegistry;
+import io.github.poisonsheep.wishingfountain.tileentity.WFEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -18,7 +20,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import java.util.Arrays;
 import java.util.List;
 
-public class MultiBlockWishingFountain implements IMultiBlock {
+public class WFMultiBlock implements IMultiBlock {
 
     private static final ResourceLocation WISHING_FOUNTAIN_TARGET = new ResourceLocation(WishingFountain.MODID, "wishing_fountain_target");
 
@@ -71,12 +73,13 @@ public class MultiBlockWishingFountain implements IMultiBlock {
             BlockState targetState = blockInfo.state();
             worldIn.setBlock(currentPos, targetState, Block.UPDATE_ALL);
             BlockEntity entity = worldIn.getBlockEntity(currentPos);
-            if (entity instanceof WishingFountainEntity) {
+            if (entity instanceof WFEntity) {
                 boolean isRender = currentPos.equals(posStart.offset(CENTER));
-                boolean cnPlaceItem = targetState.getValue(WishingFountainBlock.FOUNTAIN).equals(2);
-                ((WishingFountainEntity) entity).setForgeData(isRender, cnPlaceItem, currentState, direction, posList);
+                boolean cnPlaceItem = targetState.getValue(WFBlock.FOUNTAIN).equals(2);
+                ((WFEntity) entity).setForgeData(isRender, cnPlaceItem, currentState, direction, posList);
             }
         }
+        worldIn.playSound(null, posStart.getX(), posStart.getY(), posStart.getZ(), SoundRegistry.BUILD.get(), SoundSource.BLOCKS, 1F, 1F);
     }
 
     @Override

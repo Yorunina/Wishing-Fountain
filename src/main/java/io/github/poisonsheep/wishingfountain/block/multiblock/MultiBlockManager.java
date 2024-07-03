@@ -12,7 +12,7 @@ public final class MultiBlockManager {
 
     public static void init() {
         MultiBlockManager manager = new MultiBlockManager();
-        manager.add(new MultiBlockWishingFountain());
+        manager.add(new WFMultiBlock());
     }
     private static List<IMultiBlock> MULTI_BLOCK_LIST;
 

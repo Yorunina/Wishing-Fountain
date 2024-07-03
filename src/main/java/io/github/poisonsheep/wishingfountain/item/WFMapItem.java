@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class WishingFountainMapItem extends Item {
+public class WFMapItem extends Item {
     private static final Direction[] DIRECTIONS = new Direction[] { Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.NORTH };
     protected static final String BIOME = "targetBiome";
     protected static final String IS_SEARCHING = "isSearchingForBiome";
@@ -43,16 +43,13 @@ public class WishingFountainMapItem extends Item {
     public static final String COLOR = "targetBiomeColor";
     public static int SEARCHING_RADIUS = 6400;
 
-    public WishingFountainMapItem() {
+    public WFMapItem() {
         super(new Properties().stacksTo(1));
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand hand) {
         ItemStack handStack = player.getItemInHand(hand);
-        if(this.getTarget(handStack) == null) {
-            return InteractionResultHolder.pass(handStack);
-        }
         ItemStack searchingMap = getSearchingMap(player);
         if(searchingMap != null) {
             player.displayClientMessage(Component.translatable("quark.misc.only_one_quill"), true);
@@ -90,7 +87,7 @@ public class WishingFountainMapItem extends Item {
 
     private ItemStack getSearchingMap(Player player) {
         for(ItemStack stack : player.getInventory().items) {
-            if(stack.getItem() instanceof WishingFountainMapItem) {
+            if(stack.getItem() instanceof WFMapItem) {
                 boolean searching = stack.getOrCreateTag().getBoolean(IS_SEARCHING);
                 if(searching)
                     return stack;
@@ -276,6 +273,10 @@ public class WishingFountainMapItem extends Item {
         stack.getOrCreateTag().putBoolean(IS_SEARCHING, true);
 
         return stack;
+    }
+
+    public static void setBiome(ItemStack itemStack, String biome) {
+        itemStack.getOrCreateTag().putString(BIOME, biome);
     }
 
     public static int getOverlayColor(ItemStack stack) {
