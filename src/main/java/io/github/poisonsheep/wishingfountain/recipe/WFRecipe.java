@@ -33,13 +33,14 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
         this.ingredients = ingredients;
     }
 
-    public void spawnOutputEntity(ServerLevel worldIn, BlockPos pos, @Nullable WFRecipeInventory inv) {
-        ItemStack stack = new ItemStack(ItemRegistry.WISHING_FOUNTAIN_MAP.get());
-        WFMapItem.setBiome(stack, biome);
-        ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
-        itemEntity.setDefaultPickUpDelay();
-        worldIn.addFreshEntity(itemEntity);
-        System.out.printf("add");
+    public void spawnOutputEntity(Level worldIn, BlockPos pos, @Nullable WFRecipeInventory inv) {
+        if(worldIn instanceof ServerLevel server) {
+            ItemStack stack = new ItemStack(ItemRegistry.WISHING_FOUNTAIN_MAP.get());
+            WFMapItem.setBiome(stack, biome);
+            ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY()+1, pos.getZ(), stack);
+            itemEntity.setDefaultPickUpDelay();
+            server.addFreshEntity(itemEntity);
+        }
     }
 
     @Override
@@ -64,7 +65,6 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
             return var10000;
         }
         var10000 = true;
-        System.out.printf(String.valueOf(var10000));
         return var10000;
     }
 

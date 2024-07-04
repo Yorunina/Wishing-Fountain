@@ -1,0 +1,12 @@
+{
+  "type": "wishing_fountain:wishing_fountain_recipe",
+  "biome": "minecraft:jungle",
+  "ingredients": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:map"
+    }
+  ]
+}

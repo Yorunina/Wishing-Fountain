@@ -6,11 +6,11 @@ import io.github.poisonsheep.wishingfountain.registry.RecipeRegistry;
 import io.github.poisonsheep.wishingfountain.tileentity.WFEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PickaxeItem;
@@ -35,8 +35,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
@@ -153,37 +155,47 @@ public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBloc
         final WFRecipeInventory inv = new WFRecipeInventory();
         List<BlockPos> posList = entity.getBlockPosList().getData();
         int j = 0;
-        for (int i = 0; i < posList.size(); i++) {
-            BlockEntity te = worldIn.getBlockEntity(posList.get(i));
+        Set<Item> addedItems = new HashSet<>(); // 创建一个HashSet来存储已经添加的物品
+        for (BlockPos blockPos : posList) {
+            BlockEntity te = worldIn.getBlockEntity(blockPos);
             if (te instanceof WFEntity wfEntity) {
-                if(wfEntity.isCanPlaceItem()) {
-                    inv.setItem(j, wfEntity.getStorageItem());
-                    j++;
+                if (wfEntity.isCanPlaceItem()) {
+                    ItemStack storageItem = wfEntity.getStorageItem();
+                    if (!storageItem.isEmpty() && !addedItems.contains(storageItem.getItem())) { // 检查物品是否已经被添加
+                        inv.setItem(j, storageItem);
+                        j++;
+                        addedItems.add(storageItem.getItem()); // 将物品添加到HashSet中
+                    }
                 }
             }
         }
-        worldIn.getRecipeManager().getAllRecipesFor(RecipeRegistry.WF_RECIPE_TYPE).stream().filter(r -> r.matches(inv, worldIn)).findFirst().ifPresent(r -> spawnResultEntity(worldIn, player, r, inv, entity));
+        Optional<WFRecipe> optionalRecipe = worldIn.getRecipeManager().getAllRecipesFor(RecipeRegistry.WF_RECIPE_TYPE).stream().filter(r -> r.matches(inv, worldIn)).findFirst();
+        optionalRecipe.ifPresent(r -> r.spawnOutputEntity(worldIn, player.getOnPos(), inv));
+        optionalRecipe.ifPresent(r -> removeIngredients(worldIn, inv, entity));
     }
 
-    private void spawnResultEntity(Level world, Player player, WFRecipe recipe, WFRecipeInventory inv, WFEntity entity) {
-        BlockPos centrePos = player.getOnPos();
-        if (world instanceof ServerLevel) {
-            recipe.spawnOutputEntity((ServerLevel) world, centrePos.above(2), inv);
-        }
-    }
 
-    private BlockPos getCentrePos(PosListData posList, BlockPos posClick) {
-        int x = 0;
-        int y = posClick.getY() - 2;
-        int z = 0;
-        for (BlockPos pos : posList.getData()) {
-            if (pos.getY() == y) {
-                x += pos.getX();
-                z += pos.getZ();
+    private void removeIngredients(Level worldIn, WFRecipeInventory inv, WFEntity entity) {
+        for (ItemStack item : inv.items) {
+            if(!item.isEmpty()) {
+                List<BlockPos> posList = entity.getBlockPosList().getData();
+                for (BlockPos pos : posList) {
+                    BlockEntity te = worldIn.getBlockEntity(pos);
+                    if (te instanceof WFEntity wfEntity) {
+                        if(wfEntity.isCanPlaceItem()) {
+                            ItemStack storage = wfEntity.getStorageItem();
+                            if(item.equals(storage)) {
+                                wfEntity.handler.extractItem(0, 1, false);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
-        return new BlockPos(x / 8, y, z / 8);
     }
+
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
         stateBuilder.add(FOUNTAIN, WATERLOGGED);
