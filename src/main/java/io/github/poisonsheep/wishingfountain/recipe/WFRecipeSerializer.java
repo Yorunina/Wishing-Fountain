@@ -24,9 +24,7 @@ public class WFRecipeSerializer implements RecipeSerializer<WFRecipe> {
         String biome = buf.readUtf();
         int i = buf.readVarInt();
         NonNullList<Ingredient> ingredients = NonNullList.withSize(i, Ingredient.EMPTY);
-        for(int j = 0; j < ingredients.size(); ++j) {
-            ingredients.set(j, Ingredient.fromNetwork(buf));
-        }
+        ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buf));
         return new WFRecipe(id, biome, ingredients);
     }
 

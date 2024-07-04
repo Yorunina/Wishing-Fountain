@@ -186,6 +186,7 @@ public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBloc
                             ItemStack storage = wfEntity.getStorageItem();
                             if(item.equals(storage)) {
                                 wfEntity.handler.extractItem(0, 1, false);
+                                wfEntity.refresh();
                                 break;
                             }
                         }

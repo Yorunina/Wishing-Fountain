@@ -52,7 +52,7 @@ public class WFMapItem extends Item {
         ItemStack handStack = player.getItemInHand(hand);
         ItemStack searchingMap = getSearchingMap(player);
         if(searchingMap != null) {
-            player.displayClientMessage(Component.translatable("quark.misc.only_one_quill"), true);
+            player.displayClientMessage(Component.translatable("wishing_fountain.misc.only_one_map_searching"), true);
             return InteractionResultHolder.fail(handStack);
         }
         playSound(worldIn, player);
