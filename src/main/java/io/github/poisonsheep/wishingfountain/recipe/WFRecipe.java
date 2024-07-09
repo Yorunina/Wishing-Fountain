@@ -1,7 +1,8 @@
 package io.github.poisonsheep.wishingfountain.recipe;
 
 import io.github.poisonsheep.wishingfountain.inventory.WFRecipeInventory;
-import io.github.poisonsheep.wishingfountain.item.WFMapItem;
+import io.github.poisonsheep.wishingfountain.item.WFBiomeMapItem;
+import io.github.poisonsheep.wishingfountain.item.WFStructureMap;
 import io.github.poisonsheep.wishingfountain.registry.ItemRegistry;
 import io.github.poisonsheep.wishingfountain.registry.RecipeRegistry;
 import net.minecraft.core.BlockPos;
@@ -24,20 +25,21 @@ import java.util.List;
 
 public class WFRecipe implements Recipe<WFRecipeInventory> {
     private final ResourceLocation id;
-    private final String biome;
+    private final String mapType;
+    private final String target;
     private final NonNullList<Ingredient> ingredients;
 
-    public WFRecipe(ResourceLocation id, String biome, NonNullList<Ingredient> ingredients) {
+    public WFRecipe(ResourceLocation id, String mapType, String target, NonNullList<Ingredient> ingredients) {
         this.id = id;
-        this.biome = biome;
+        this.mapType = mapType;
+        this.target = target;
         this.ingredients = ingredients;
     }
 
     public void spawnOutputEntity(Level worldIn, BlockPos pos, @Nullable WFRecipeInventory inv) {
         if(worldIn instanceof ServerLevel server) {
-            ItemStack stack = new ItemStack(ItemRegistry.WISHING_FOUNTAIN_MAP.get());
-            WFMapItem.setBiome(stack, biome);
-            ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY()+1, pos.getZ(), stack);
+            ItemStack map = extractMap();
+            ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY()+1, pos.getZ(), map);
             itemEntity.setDefaultPickUpDelay();
             server.addFreshEntity(itemEntity);
         }
@@ -80,9 +82,19 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        ItemStack stack = new ItemStack(ItemRegistry.WISHING_FOUNTAIN_MAP.get());
-        WFMapItem.setBiome(stack, biome);
-        return stack;
+        return extractMap();
+    }
+
+    private ItemStack extractMap() {
+        ItemStack map = ItemStack.EMPTY;
+        if(mapType.equals("biome")) {
+            map = new ItemStack(ItemRegistry.WF_BIOME_MAP.get());
+            WFBiomeMapItem.setTarget(map, target);
+        } else if(mapType.equals("structure")) {
+            map = new ItemStack(ItemRegistry.WF_STRUCTURE_MAP.get());
+            WFStructureMap.setTarget(map, target);
+        }
+        return map;
     }
 
     @Override
@@ -100,7 +112,11 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
         return RecipeRegistry.WF_RECIPE_TYPE;
     }
 
-    public String getBiome() {
-        return this.biome;
+    public String getMapType() {
+        return this.mapType;
+    }
+
+    public String getTarget() {
+        return this.target;
     }
 }

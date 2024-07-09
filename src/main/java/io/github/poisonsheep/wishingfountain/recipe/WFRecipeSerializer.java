@@ -14,29 +14,31 @@ public class WFRecipeSerializer implements RecipeSerializer<WFRecipe> {
 
     @Override
     public WFRecipe fromJson(ResourceLocation id, JsonObject json) {
-        String biome = GsonHelper.getAsString(json, "biome");
+        String type = GsonHelper.getAsString(json, "map_type");
+        String target = GsonHelper.getAsString(json, "target");
         NonNullList<Ingredient> ingredients = itemsFromJson(GsonHelper.getAsJsonArray(json, "ingredients"));
-        return new WFRecipe(id, biome, ingredients);
+        return new WFRecipe(id,type, target, ingredients);
     }
 
     @Override
     public @Nullable WFRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-        String biome = buf.readUtf();
+        String type = buf.readUtf();
+        String target = buf.readUtf();
         int i = buf.readVarInt();
         NonNullList<Ingredient> ingredients = NonNullList.withSize(i, Ingredient.EMPTY);
         ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buf));
-        return new WFRecipe(id, biome, ingredients);
+        return new WFRecipe(id,type, target, ingredients);
     }
 
     @Override
     public void toNetwork(FriendlyByteBuf buf, WFRecipe recipe) {
-        buf.writeUtf(recipe.getBiome());
+        buf.writeUtf(recipe.getMapType());
+        buf.writeUtf(recipe.getTarget());
         buf.writeVarInt(recipe.getIngredients().size());
         for (Ingredient ingredient : recipe.getIngredients()) {
             ingredient.toNetwork(buf);
         }
     }
-
 
     private static NonNullList<Ingredient> itemsFromJson(JsonArray p_44276_) {
         NonNullList<Ingredient> nonnulllist = NonNullList.create();

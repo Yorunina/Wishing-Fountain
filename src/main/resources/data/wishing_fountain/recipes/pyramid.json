@@ -1,10 +1,10 @@
 {
   "type": "wishing_fountain:wishing_fountain_recipe",
-  "map_type": "biome",
-  "target": "minecraft:jungle",
+  "map_type": "structure",
+  "target": "minecraft:desert_pyramid",
   "ingredients": [
     {
-      "item": "minecraft:diamond"
+      "item": "minecraft:emerald"
     },
     {
       "item": "minecraft:map"
