@@ -8,6 +8,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -49,6 +51,7 @@ public class WFBiomeMapItem extends WFMapItem {
         } else {
             BlockPos corner = result.getObject();
             BlockPos found = calculateBiomeCenter(worldIn, corner, target);
+            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1F, 1F);
             return createMap(worldIn, found, target, stack);
         }
     }
@@ -71,40 +74,33 @@ public class WFBiomeMapItem extends WFMapItem {
             ItemStack dummy = stack.copy();
             EXECUTORS.submit(() -> {
                 COMPUTING.add(key);
-                RESULTS.put(key, searchIterative(targetBiome, dummy, worldIn, player, Integer.MAX_VALUE));
+                RESULTS.put(key, searchIterative(targetBiome, dummy, worldIn, player));
                 COMPUTING.remove(key);
             });
             return InteractionResultHolder.pass(BlockPos.ZERO);
         }
     }
 
-    protected InteractionResultHolder<BlockPos> searchIterative(ResourceLocation targetBiome, ItemStack stack, ServerLevel worldIn, Player player, int maxIter) {
+    protected InteractionResultHolder<BlockPos> searchIterative(ResourceLocation targetBiome, ItemStack stack, ServerLevel worldIn, Player player) {
         int y = player.getBlockY();
-        for(int i = 0; i < maxIter; i++) {
-
+        for(int i = 0; i < Integer.MAX_VALUE; i++) {
             final int height = 64;
-
             BlockPos nextPos = nextPos(stack, 32);
-            System.out.printf(nextPos.toString());
+            System.out.println(nextPos);
             if(nextPos == null) {
                 return InteractionResultHolder.fail(BlockPos.ZERO);
             }
             int[] searchedHeights = Mth.outFromOrigin(y, worldIn.getMinBuildHeight() + 1, worldIn.getMaxBuildHeight(), height).toArray();
-
             int testX = nextPos.getX();
             int testZ = nextPos.getZ();
             int quartX = QuartPos.fromBlock(testX);
             int quartZ = QuartPos.fromBlock(testZ);
-
             for(int testY : searchedHeights) {
                 int quartY = QuartPos.fromBlock(testY);
-
                 ServerChunkCache cache = worldIn.getChunkSource();
                 BiomeSource source = cache.getGenerator().getBiomeSource();
                 Climate.Sampler sampler = cache.randomState().sampler();
-
                 Holder<Biome> holder = source.getNoiseBiome(quartX, quartY, quartZ, sampler);
-
                 if(holder.is(targetBiome)) {
                     BlockPos mapPos = new BlockPos(testX, testY, testZ);
                     return InteractionResultHolder.sidedSuccess(mapPos, worldIn.isClientSide);

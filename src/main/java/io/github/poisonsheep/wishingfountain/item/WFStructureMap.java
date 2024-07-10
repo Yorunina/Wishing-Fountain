@@ -6,6 +6,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -43,16 +45,19 @@ public class WFStructureMap extends WFMapItem{
             placementToStructuresMap.put(structureplacement, structure);
         }
         InteractionResultHolder<BlockPos> result = null;
+        System.out.println(placementToStructuresMap.entrySet().size());
         for (Map.Entry<StructurePlacement, Structure> entry : placementToStructuresMap.entrySet()) {
             StructurePlacement placement = entry.getKey();
             result = concurrentSearch(worldIn, stack, centerPos, placement, entry.getValue());
         }
         if(result == null || result.getResult() == InteractionResult.FAIL) {
+            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1F, 1F);
             return ItemStack.EMPTY;
         } else if(result.getResult() == InteractionResult.PASS) {
             return stack;
         } else {
             BlockPos found = result.getObject();
+            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1F, 1F);
             return createMap(worldIn, found, target, stack);
         }
     }
@@ -89,6 +94,7 @@ public class WFStructureMap extends WFMapItem{
     private InteractionResultHolder<BlockPos> iterativeSearch(ServerLevel worldIn, ItemStack stack, BlockPos pos, StructurePlacement placement, Structure structure) {
         for(int i = 0; i < Integer.MAX_VALUE; i++) {
             BlockPos blockPos = nextPos(stack, 16);
+            System.out.println(blockPos);
             if(blockPos == null) {
                 return InteractionResultHolder.fail(BlockPos.ZERO);
             }
@@ -97,14 +103,12 @@ public class WFStructureMap extends WFMapItem{
             int chunkY = blockPos.getZ() >> 4;
             ChunkPos chunkPos = new ChunkPos(chunkX, chunkY);
             BlockPos currentPos = new BlockPos(SectionPos.sectionToBlockCoord(chunkPos.x, 8), 0, SectionPos.sectionToBlockCoord(chunkPos.z, 8));
-            System.out.printf(String.valueOf(currentPos));
             BlockPos structurePos = getStructureGeneratingAt(worldIn, chunkPos, structure, placement);
             if(structurePos != null) {
                 double newDist = pos.distSqr(currentPos);
                 double oldDist = stack.getOrCreateTag().getDouble(DISTANCE);
                 if(newDist < oldDist) {
                     stack.getOrCreateTag().putDouble(DISTANCE, newDist);
-                    System.out.printf(String.valueOf(structurePos));
                     return InteractionResultHolder.sidedSuccess(structurePos, worldIn.isClientSide);
                 }
             }

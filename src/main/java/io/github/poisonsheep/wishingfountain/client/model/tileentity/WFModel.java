@@ -1,4 +1,7 @@
-package io.github.poisonsheep.wishingfountain.client.model.tileentity;
+package io.github.poisonsheep.wishingfountain.client.model.tileentity;// Made with Blockbench 4.10.3
+// Exported for Minecraft version 1.17 or later with Mojang mappings
+// Paste this class into your mod and generate all required imports
+
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -69,18 +72,16 @@ public class WFModel extends EntityModel<Entity> {
 		.texOffs(125, 92).addBox(-5.0F, -15.0F, 24.0F, 10.0F, 2.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(-16.0F, 37.0F, 0.0F));
 
 		PartDefinition bone9 = partdefinition.addOrReplaceChild("bone9", CubeListBuilder.create().texOffs(134, 0).addBox(-8.0F, -15.0F, 24.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 21).addBox(-6.0F, -31.0F, 24.0F, 12.0F, 6.0F, 23.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 102).addBox(6.0F, -31.0F, 24.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 21).addBox(-6.0F, -29.0F, 24.0F, 12.0F, 4.0F, 23.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 102).addBox(6.0F, -29.0F, 24.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F))
 		.texOffs(52, 129).addBox(5.0F, -25.0F, 24.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
 		.texOffs(52, 129).addBox(-8.0F, -25.0F, 24.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
 		.texOffs(80, 130).addBox(6.0F, -15.0F, 24.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 102).addBox(-8.0F, -31.0F, 24.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F))
-		.texOffs(109, 8).addBox(-11.0F, -31.0F, 24.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F))
-		.texOffs(46, 108).mirror().addBox(8.0F, -31.0F, 24.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F)).mirror(false)
+		.texOffs(0, 102).addBox(-8.0F, -29.0F, 24.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F))
 		.texOffs(106, 45).addBox(-5.0F, -25.0F, 24.0F, 10.0F, 11.0F, 13.0F, new CubeDeformation(0.0F))
 		.texOffs(85, 92).addBox(-6.0F, -15.0F, 24.0F, 12.0F, 2.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 37.0F, 0.0F));
 
-		PartDefinition bone2 = partdefinition.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(64, 5).addBox(-8.0F, -31.0F, 24.0F, 16.0F, 6.0F, 16.0F, new CubeDeformation(0.0F))
+		PartDefinition bone2 = partdefinition.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(64, 5).addBox(-8.0F, -29.0F, 24.0F, 16.0F, 4.0F, 16.0F, new CubeDeformation(0.0F))
 		.texOffs(139, 36).addBox(1.0F, -25.0F, 24.0F, 7.0F, 11.0F, 7.0F, new CubeDeformation(0.0F))
 		.texOffs(134, 16).addBox(-1.0F, -15.0F, 24.0F, 9.0F, 2.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(-32.0F, 37.0F, 0.0F));
 
@@ -104,15 +105,15 @@ public class WFModel extends EntityModel<Entity> {
 		.texOffs(126, 69).addBox(-37.0F, -25.0F, 1.0F, 10.0F, 11.0F, 7.0F, new CubeDeformation(0.0F))
 		.texOffs(125, 92).addBox(-37.0F, -15.0F, -2.0F, 10.0F, 2.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-32.0F, 37.0F, -16.0F, 0.0F, 1.5708F, 0.0F));
 
-		PartDefinition bone4 = partdefinition.addOrReplaceChild("bone4", CubeListBuilder.create().texOffs(64, 5).mirror().addBox(-8.0F, -31.0F, 24.0F, 16.0F, 6.0F, 16.0F, new CubeDeformation(0.0F)).mirror(false)
+		PartDefinition bone4 = partdefinition.addOrReplaceChild("bone4", CubeListBuilder.create().texOffs(64, 5).mirror().addBox(-8.0F, -29.0F, 24.0F, 16.0F, 4.0F, 16.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(139, 36).mirror().addBox(-8.0F, -25.0F, 24.0F, 7.0F, 11.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(134, 16).mirror().addBox(-8.0F, -15.0F, 24.0F, 9.0F, 2.0F, 9.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(32.0F, 37.0F, 0.0F));
 
-		PartDefinition bone6 = partdefinition.addOrReplaceChild("bone6", CubeListBuilder.create().texOffs(64, 5).mirror().addBox(-8.0F, -31.0F, 24.0F, 16.0F, 6.0F, 16.0F, new CubeDeformation(0.0F)).mirror(false)
+		PartDefinition bone6 = partdefinition.addOrReplaceChild("bone6", CubeListBuilder.create().texOffs(64, 5).mirror().addBox(-8.0F, -29.0F, 24.0F, 16.0F, 4.0F, 16.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(139, 36).mirror().addBox(-8.0F, -25.0F, 33.0F, 7.0F, 11.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(134, 16).mirror().addBox(-8.0F, -15.0F, 31.0F, 9.0F, 2.0F, 9.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(32.0F, 37.0F, -64.0F));
 
-		PartDefinition bone7 = partdefinition.addOrReplaceChild("bone7", CubeListBuilder.create().texOffs(64, 5).addBox(-8.0F, -31.0F, 24.0F, 16.0F, 6.0F, 16.0F, new CubeDeformation(0.0F))
+		PartDefinition bone7 = partdefinition.addOrReplaceChild("bone7", CubeListBuilder.create().texOffs(64, 5).addBox(-8.0F, -29.0F, 24.0F, 16.0F, 4.0F, 16.0F, new CubeDeformation(0.0F))
 		.texOffs(139, 36).addBox(1.0F, -25.0F, 33.0F, 7.0F, 11.0F, 7.0F, new CubeDeformation(0.0F))
 		.texOffs(134, 16).addBox(-1.0F, -15.0F, 31.0F, 9.0F, 2.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(-32.0F, 37.0F, -64.0F));
 
@@ -127,38 +128,32 @@ public class WFModel extends EntityModel<Entity> {
 		.texOffs(125, 92).mirror().addBox(27.0F, -15.0F, -2.0F, 10.0F, 2.0F, 10.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(32.0F, 37.0F, -16.0F, 0.0F, -1.5708F, 0.0F));
 
 		PartDefinition bone10 = partdefinition.addOrReplaceChild("bone10", CubeListBuilder.create().texOffs(134, 0).addBox(-8.0F, -15.0F, 26.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 21).addBox(-6.0F, -31.0F, 17.0F, 12.0F, 6.0F, 23.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 102).addBox(6.0F, -31.0F, 19.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 21).addBox(-6.0F, -29.0F, 17.0F, 12.0F, 4.0F, 23.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 102).addBox(6.0F, -29.0F, 19.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F))
 		.texOffs(52, 129).addBox(5.0F, -25.0F, 29.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
 		.texOffs(52, 129).addBox(-8.0F, -25.0F, 29.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
 		.texOffs(80, 130).addBox(6.0F, -15.0F, 26.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 102).addBox(-8.0F, -31.0F, 19.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F))
-		.texOffs(109, 8).addBox(-11.0F, -31.0F, 21.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F))
-		.texOffs(46, 108).mirror().addBox(8.0F, -31.0F, 21.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F)).mirror(false)
+		.texOffs(0, 102).addBox(-8.0F, -29.0F, 19.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F))
 		.texOffs(106, 45).addBox(-5.0F, -25.0F, 27.0F, 10.0F, 11.0F, 13.0F, new CubeDeformation(0.0F))
 		.texOffs(85, 92).addBox(-6.0F, -15.0F, 24.0F, 12.0F, 2.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 37.0F, -64.0F));
 
 		PartDefinition bone11 = partdefinition.addOrReplaceChild("bone11", CubeListBuilder.create().texOffs(134, 0).addBox(24.0F, -15.0F, -6.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 21).addBox(26.0F, -31.0F, -15.0F, 12.0F, 6.0F, 23.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 102).addBox(38.0F, -31.0F, -13.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 21).addBox(26.0F, -29.0F, -15.0F, 12.0F, 4.0F, 23.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 102).addBox(38.0F, -29.0F, -13.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F))
 		.texOffs(52, 129).addBox(37.0F, -25.0F, -3.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
 		.texOffs(52, 129).addBox(24.0F, -25.0F, -3.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
 		.texOffs(80, 130).addBox(38.0F, -15.0F, -6.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 102).addBox(24.0F, -31.0F, -13.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F))
-		.texOffs(109, 8).addBox(21.0F, -31.0F, -11.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F))
-		.texOffs(46, 108).mirror().addBox(40.0F, -31.0F, -11.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F)).mirror(false)
+		.texOffs(0, 102).addBox(24.0F, -29.0F, -13.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F))
 		.texOffs(106, 45).addBox(27.0F, -25.0F, -5.0F, 10.0F, 11.0F, 13.0F, new CubeDeformation(0.0F))
 		.texOffs(85, 92).addBox(26.0F, -15.0F, -8.0F, 12.0F, 2.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(32.0F, 37.0F, -32.0F, 0.0F, -1.5708F, 0.0F));
 
 		PartDefinition bone12 = partdefinition.addOrReplaceChild("bone12", CubeListBuilder.create().texOffs(134, 0).mirror().addBox(-26.0F, -15.0F, -6.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F)).mirror(false)
-		.texOffs(0, 21).mirror().addBox(-38.0F, -31.0F, -15.0F, 12.0F, 6.0F, 23.0F, new CubeDeformation(0.0F)).mirror(false)
-		.texOffs(0, 102).mirror().addBox(-40.0F, -31.0F, -13.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F)).mirror(false)
+		.texOffs(0, 21).mirror().addBox(-38.0F, -29.0F, -15.0F, 12.0F, 4.0F, 23.0F, new CubeDeformation(0.0F)).mirror(false)
+		.texOffs(0, 102).mirror().addBox(-40.0F, -29.0F, -13.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(52, 129).mirror().addBox(-40.0F, -25.0F, -3.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(52, 129).mirror().addBox(-27.0F, -25.0F, -3.0F, 3.0F, 11.0F, 11.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(80, 130).mirror().addBox(-40.0F, -15.0F, -6.0F, 2.0F, 2.0F, 14.0F, new CubeDeformation(0.0F)).mirror(false)
-		.texOffs(0, 102).mirror().addBox(-26.0F, -31.0F, -13.0F, 2.0F, 6.0F, 21.0F, new CubeDeformation(0.0F)).mirror(false)
-		.texOffs(109, 8).mirror().addBox(-24.0F, -31.0F, -11.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F)).mirror(false)
-		.texOffs(46, 108).addBox(-43.0F, -31.0F, -11.0F, 3.0F, 2.0F, 19.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 102).mirror().addBox(-26.0F, -29.0F, -13.0F, 2.0F, 4.0F, 21.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(106, 45).mirror().addBox(-37.0F, -25.0F, -5.0F, 10.0F, 11.0F, 13.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(85, 92).mirror().addBox(-38.0F, -15.0F, -8.0F, 12.0F, 2.0F, 16.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-32.0F, 37.0F, -32.0F, 0.0F, 1.5708F, 0.0F));
 
