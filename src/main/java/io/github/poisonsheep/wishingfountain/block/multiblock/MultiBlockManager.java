@@ -14,6 +14,7 @@ public final class MultiBlockManager {
         MultiBlockManager manager = new MultiBlockManager();
         manager.add(new WFMultiBlock());
     }
+
     private static List<IMultiBlock> MULTI_BLOCK_LIST;
 
     public static List<IMultiBlock> getMultiBlockList() {

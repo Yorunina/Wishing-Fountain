@@ -43,9 +43,7 @@ import java.util.Set;
 public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
 
     public static final IntegerProperty FOUNTAIN = IntegerProperty.create("fountain", 1, 2);
-
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-
     protected static final VoxelShape DEFAULT_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
 
@@ -72,17 +70,16 @@ public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBloc
         return this.getEntity(worldIn, pos).filter(wishingFountain -> handIn == InteractionHand.MAIN_HAND).map(wishingFountain -> {
             if (wishingFountain.isCanPlaceItem()) {
                 if (player.getMainHandItem().isEmpty()) {
-                    takeOutItem(worldIn, wishingFountain, player);
+                    return takeOutItem(worldIn, wishingFountain, player);
                 } else {
-                    takeInItem(worldIn, wishingFountain, player);
+                    return takeInItem(worldIn, wishingFountain, player);
                 }
-                wishingFountain.refresh();
             }
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+            return InteractionResult.FAIL;
         }).orElse(super.use(state, worldIn, pos, player, handIn, hit));
     }
 
-    private void takeOutItem(Level worldIn, WFEntity wishingFountain, Player player) {
+    private InteractionResult takeOutItem(Level worldIn, WFEntity wishingFountain, Player player) {
         ItemStack stack = wishingFountain.handler.getStackInSlot(0);
         if(!stack.isEmpty()) {
             if (player.isShiftKeyDown()) {
@@ -93,17 +90,23 @@ public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBloc
                 ItemHandlerHelper.giveItemToPlayer(player, extractItem);
             }
             craft(worldIn, wishingFountain, player);
+            wishingFountain.refresh();
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
         }
+        return InteractionResult.FAIL;
     }
 
-    private void takeInItem(Level worldIn, WFEntity wishingFountain, Player playerIn) {
+    private InteractionResult takeInItem(Level worldIn, WFEntity wishingFountain, Player playerIn) {
         ItemStack playerItem = playerIn.getMainHandItem();
         ItemStack stack = wishingFountain.handler.getStackInSlot(0);
         if ((stack.isEmpty() || stack.getItem().equals(playerItem.getItem())) && stack.getCount() < 8) {
             wishingFountain.handler.insertItem(0, new ItemStack(playerItem.getItem(), 1), false);
             playerItem.shrink(1);
             craft(worldIn, wishingFountain, playerIn);
+            wishingFountain.refresh();
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
         }
+        return InteractionResult.FAIL;
     }
 
     @Override

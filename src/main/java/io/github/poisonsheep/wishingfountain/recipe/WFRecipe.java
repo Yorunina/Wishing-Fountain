@@ -39,7 +39,7 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
     public void spawnOutputEntity(Level worldIn, BlockPos pos, @Nullable WFRecipeInventory inv) {
         if(worldIn instanceof ServerLevel server) {
             ItemStack map = extractMap();
-            ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY()+1, pos.getZ(), map);
+            ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY() + 2, pos.getZ(), map);
             itemEntity.setDefaultPickUpDelay();
             server.addFreshEntity(itemEntity);
         }
