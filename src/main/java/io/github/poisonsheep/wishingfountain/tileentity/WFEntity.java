@@ -9,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -58,6 +59,16 @@ public class WFEntity extends BlockEntity {
         this.direction = direction;
         this.blockPosList = blockPosList;
         refresh();
+    }
+
+    public void addItem(ItemEntity entity) {
+        ItemStack outside = entity.getItem().copy();
+        ItemStack inside = this.getStorageItem();
+        if((inside.isEmpty() || inside.getItem().equals(outside.getItem())) && inside.getCount() < 8) {
+            this.handler.insertItem(0, new ItemStack(outside.getItem(), 1), false);
+            outside.shrink(1);
+        }
+        entity.setItem(outside);
     }
 
     @Override
@@ -119,4 +130,6 @@ public class WFEntity extends BlockEntity {
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
+
+
 }

@@ -5,6 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -31,6 +33,7 @@ abstract class WFMapItem extends Item {
     protected static final String COLOR = "targetColor";
     protected static final String TARGET = "target";
     protected static int SEARCHING_RADIUS = 6400;
+    private int tickCounter = 0;
 
     public WFMapItem() {
         super(new Item.Properties().stacksTo(1));
@@ -51,18 +54,25 @@ abstract class WFMapItem extends Item {
         handStack.getOrCreateTag().putDouble(SOURCE_X, pos.x);
         handStack.getOrCreateTag().putDouble(SOURCE_Z, pos.z);
         handStack.getOrCreateTag().putDouble(DISTANCE, Double.MAX_VALUE);
+        this.tickCounter = 0;
         return InteractionResultHolder.sidedSuccess(handStack, worldIn.isClientSide);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entity, int slot, boolean hand) {
-        if (stack.getTag() != null && worldIn instanceof ServerLevel server && stack.getTag().getBoolean(IS_SEARCHING) && entity instanceof Player player) {
-            ItemStack runningStack = search(stack, server, player, slot);
-            if(player.getOffhandItem() == stack){
-                player.setItemInHand(InteractionHand.OFF_HAND, runningStack);
-            } else {
-                player.getInventory().setItem(slot, runningStack);
+        if (stack.getTag() != null && stack.getTag().getBoolean(IS_SEARCHING) && entity instanceof Player player) {
+            if(worldIn instanceof ServerLevel server) {
+                ItemStack runningStack = search(stack, server, player, slot);
+                if(player.getOffhandItem() == stack){
+                    player.setItemInHand(InteractionHand.OFF_HAND, runningStack);
+                } else {
+                    player.getInventory().setItem(slot, runningStack);
+                }
+            } else if(worldIn.isClientSide && tickCounter % 20 == 0) {
+                RandomSource rand = worldIn.getRandom();
+                player.playSound(SoundEvents.BOAT_PADDLE_WATER,1.0F, 1.2F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
             }
+            tickCounter++;
         }
     }
 

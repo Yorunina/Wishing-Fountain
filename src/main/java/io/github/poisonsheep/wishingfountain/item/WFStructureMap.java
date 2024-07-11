@@ -45,7 +45,6 @@ public class WFStructureMap extends WFMapItem{
             placementToStructuresMap.put(structureplacement, structure);
         }
         InteractionResultHolder<BlockPos> result = null;
-        System.out.println(placementToStructuresMap.entrySet().size());
         for (Map.Entry<StructurePlacement, Structure> entry : placementToStructuresMap.entrySet()) {
             StructurePlacement placement = entry.getKey();
             result = concurrentSearch(worldIn, stack, centerPos, placement, entry.getValue());
@@ -57,7 +56,7 @@ public class WFStructureMap extends WFMapItem{
             return stack;
         } else {
             BlockPos found = result.getObject();
-            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1F, 1F);
+            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1F, 1F);
             return createMap(worldIn, found, target, stack);
         }
     }
@@ -94,7 +93,6 @@ public class WFStructureMap extends WFMapItem{
     private InteractionResultHolder<BlockPos> iterativeSearch(ServerLevel worldIn, ItemStack stack, BlockPos pos, StructurePlacement placement, Structure structure) {
         for(int i = 0; i < Integer.MAX_VALUE; i++) {
             BlockPos blockPos = nextPos(stack, 16);
-            System.out.println(blockPos);
             if(blockPos == null) {
                 return InteractionResultHolder.fail(BlockPos.ZERO);
             }

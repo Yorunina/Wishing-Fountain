@@ -45,13 +45,14 @@ public class WFBiomeMapItem extends WFMapItem {
         }
         InteractionResultHolder<BlockPos> result = searchConcurrent(target, worldIn, stack, player);
         if(result.getResult() == InteractionResult.FAIL) {
+            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1F, 1F);
             return ItemStack.EMPTY;
         } else if(result.getResult() == InteractionResult.PASS) {
             return stack;
         } else {
             BlockPos corner = result.getObject();
             BlockPos found = calculateBiomeCenter(worldIn, corner, target);
-            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1F, 1F);
+            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1F, 1F);
             return createMap(worldIn, found, target, stack);
         }
     }
@@ -86,7 +87,6 @@ public class WFBiomeMapItem extends WFMapItem {
         for(int i = 0; i < Integer.MAX_VALUE; i++) {
             final int height = 64;
             BlockPos nextPos = nextPos(stack, 32);
-            System.out.println(nextPos);
             if(nextPos == null) {
                 return InteractionResultHolder.fail(BlockPos.ZERO);
             }

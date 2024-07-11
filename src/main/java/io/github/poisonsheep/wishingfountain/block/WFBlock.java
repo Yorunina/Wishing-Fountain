@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
+public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
     public static final IntegerProperty FOUNTAIN = IntegerProperty.create("fountain", 1, 2);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -108,6 +109,21 @@ public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBloc
         }
         return InteractionResult.FAIL;
     }
+
+    //弃用方法，不知道非弃用方法怎么搞
+    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entity) {
+        if (!worldIn.isClientSide() && entity instanceof ItemEntity itemEntity && worldIn.getBlockEntity(pos) instanceof WFEntity wishingFountain) {
+            if(wishingFountain.isCanPlaceItem()) {
+                wishingFountain.addItem(itemEntity);
+                Entity thrower = itemEntity.getOwner();
+                if(thrower instanceof Player player) {
+                    craft(worldIn, wishingFountain, player);
+                }
+                wishingFountain.refresh();
+            }
+        }
+    }
+
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
@@ -198,7 +214,6 @@ public class WFBlock extends Block implements EntityBlock, SimpleWaterloggedBloc
             }
         }
     }
-
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
