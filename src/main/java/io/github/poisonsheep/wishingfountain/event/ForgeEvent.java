@@ -1,11 +1,13 @@
 package io.github.poisonsheep.wishingfountain.event;
 
 import io.github.poisonsheep.wishingfountain.WishingFountain;
+import io.github.poisonsheep.wishingfountain.advancement.AdvancementTriggerRegistry;
 import io.github.poisonsheep.wishingfountain.block.multiblock.IMultiBlock;
 import io.github.poisonsheep.wishingfountain.block.multiblock.MultiBlockManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -50,6 +52,9 @@ public class ForgeEvent {
                                     itemEntity.setItem(stack);
                                     if (stack.isEmpty()) {
                                         itemEntity.discard();
+                                    }
+                                    if(player instanceof ServerPlayer serverPlayer){
+                                        AdvancementTriggerRegistry.SET_SAIL.trigger(serverPlayer);
                                     }
                                 }
                             }

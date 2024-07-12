@@ -64,9 +64,9 @@ public class WFEntity extends BlockEntity {
     public void addItem(ItemEntity entity) {
         ItemStack outside = entity.getItem().copy();
         ItemStack inside = this.getStorageItem();
-        if((inside.isEmpty() || inside.getItem().equals(outside.getItem())) && inside.getCount() < 8) {
-            this.handler.insertItem(0, new ItemStack(outside.getItem(), 1), false);
-            outside.shrink(1);
+        if((inside.isEmpty() || inside.getItem().equals(outside.getItem())) && inside.getCount() < 8 && inside.getCount() < outside.getMaxStackSize()) {
+            ItemStack singleItemStack = outside.split(1);
+            this.handler.insertItem(0, singleItemStack, false);
         }
         entity.setItem(outside);
     }
@@ -130,6 +130,5 @@ public class WFEntity extends BlockEntity {
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
-
 
 }

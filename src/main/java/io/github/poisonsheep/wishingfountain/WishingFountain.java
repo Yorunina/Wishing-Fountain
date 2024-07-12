@@ -1,6 +1,6 @@
 package io.github.poisonsheep.wishingfountain;
 
-
+import io.github.poisonsheep.wishingfountain.advancement.AdvancementTriggerRegistry;
 import io.github.poisonsheep.wishingfountain.block.multiblock.MultiBlockManager;
 import io.github.poisonsheep.wishingfountain.event.ForgeEvent;
 import io.github.poisonsheep.wishingfountain.registry.*;
@@ -33,7 +33,9 @@ public class WishingFountain {
         SoundRegistry.SOUNDS.register(modBusEvent);
         RecipeRegistry.DEF_REG.register(modBusEvent);
     }
-    private void setup(final FMLCommonSetupEvent event) {}
+    private void setup(final FMLCommonSetupEvent event) {
+        AdvancementTriggerRegistry.register();
+    }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {}
 

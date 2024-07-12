@@ -100,9 +100,9 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     private InteractionResult takeInItem(Level worldIn, WFEntity wishingFountain, Player playerIn) {
         ItemStack playerItem = playerIn.getMainHandItem();
         ItemStack stack = wishingFountain.handler.getStackInSlot(0);
-        if ((stack.isEmpty() || stack.getItem().equals(playerItem.getItem())) && stack.getCount() < 8) {
-            wishingFountain.handler.insertItem(0, new ItemStack(playerItem.getItem(), 1), false);
-            playerItem.shrink(1);
+        if ((stack.isEmpty() || stack.getItem().equals(playerItem.getItem())) && stack.getCount() < 8 && stack.getCount() < playerItem.getMaxStackSize()) {
+            ItemStack singleItemStack = playerItem.split(1);
+            wishingFountain.handler.insertItem(0, singleItemStack, false);
             craft(worldIn, wishingFountain, playerIn);
             wishingFountain.refresh();
             return InteractionResult.sidedSuccess(worldIn.isClientSide);

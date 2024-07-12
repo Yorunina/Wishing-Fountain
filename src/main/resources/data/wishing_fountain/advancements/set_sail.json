@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "wishing_fountain:wf_biome_map"
+    },
+    "title": {
+      "translate": "wishing_fountain.advancements.set_sail.title"
+    },
+    "description": {
+      "translate": "wishing_fountain.advancements.set_sail.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "wishing_fountain:textures/gui/advancement_background.png"
+  },
+  "criteria": {
+    "set_sail": {
+      "trigger": "wishing_fountain:set_sail",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "set_sail"
+    ]
+  ]
+}

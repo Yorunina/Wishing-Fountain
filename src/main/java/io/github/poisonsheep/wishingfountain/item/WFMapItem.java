@@ -33,7 +33,6 @@ abstract class WFMapItem extends Item {
     protected static final String COLOR = "targetColor";
     protected static final String TARGET = "target";
     protected static int SEARCHING_RADIUS = 6400;
-    private int tickCounter = 0;
 
     public WFMapItem() {
         super(new Item.Properties().stacksTo(1));
@@ -47,14 +46,12 @@ abstract class WFMapItem extends Item {
             player.displayClientMessage(Component.translatable("wishing_fountain.misc.only_one_map_searching"), true);
             return InteractionResultHolder.fail(handStack);
         }
-        playSound(worldIn, player);
         //不清楚getTag()和getOrCreateTag()有啥区别
         Vec3 pos = player.getPosition(1F);
         handStack.getOrCreateTag().putBoolean(IS_SEARCHING, true);
         handStack.getOrCreateTag().putDouble(SOURCE_X, pos.x);
         handStack.getOrCreateTag().putDouble(SOURCE_Z, pos.z);
         handStack.getOrCreateTag().putDouble(DISTANCE, Double.MAX_VALUE);
-        this.tickCounter = 0;
         return InteractionResultHolder.sidedSuccess(handStack, worldIn.isClientSide);
     }
 
@@ -68,11 +65,12 @@ abstract class WFMapItem extends Item {
                 } else {
                     player.getInventory().setItem(slot, runningStack);
                 }
-            } else if(worldIn.isClientSide && tickCounter % 20 == 0) {
-                RandomSource rand = worldIn.getRandom();
-                player.playSound(SoundEvents.BOAT_PADDLE_WATER,1.0F, 1.2F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
+            } else {
+                if((stack.equals(player.getMainHandItem()) || stack.equals(player.getOffhandItem())) && worldIn.getGameTime() % 20 == 0 ) {
+                    RandomSource rand = worldIn.getRandom();
+                    player.playSound(SoundEvents.BOAT_PADDLE_WATER,1.0F, 1.2F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
+                }
             }
-            tickCounter++;
         }
     }
 
@@ -133,5 +131,4 @@ abstract class WFMapItem extends Item {
 
     protected abstract ItemStack search(ItemStack stack, ServerLevel worldIn, Player player, int slot);
 
-    private void playSound(Level worldIn, Player player) {}
 }
