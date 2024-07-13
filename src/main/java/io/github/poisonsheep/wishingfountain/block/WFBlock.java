@@ -58,6 +58,7 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new WFEntity(pos, state);
     }
+
     protected Optional<WFEntity> getEntity(BlockGetter world, BlockPos pos) {
         BlockEntity te = world.getBlockEntity(pos);
         if (te instanceof WFEntity) {

@@ -4,13 +4,10 @@
   "target": "minecraft:jungle",
   "ingredients": [
     {
-      "item": "minecraft:diamond"
+      "item": "minecraft:emerald"
     },
     {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "item": "minecraft:oak_boat"
+      "item": "minecraft:vine"
     }
   ]
 }

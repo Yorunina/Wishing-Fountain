@@ -53,7 +53,7 @@ public class WFBiomeMapItem extends WFMapItem {
             BlockPos corner = result.getObject();
             BlockPos found = calculateBiomeCenter(worldIn, corner, target);
             worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1F, 1F);
-            return createMap(worldIn, found, target, stack);
+            return createMap(worldIn, found, target);
         }
     }
 

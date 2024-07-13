@@ -1,7 +1,7 @@
 {
   "wishing_fountain_build": {
     "replace": false,
-    "subtitle": "wishing_fountain.build",
+    "subtitle": "wishing_fountain.sound.build",
     "sounds": [
       "wishing_fountain:build"
     ]

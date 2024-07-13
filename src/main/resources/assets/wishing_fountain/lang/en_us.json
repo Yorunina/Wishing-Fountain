@@ -1,4 +1,20 @@
 {
-  "wishing_fountain.advancements.set_sail.title": "",
-  "wishing_fountain.advancements.set_sail.description": ""
+  "wishing_fountain.advancements.set_sail.title": "It’s better to burn out than to fade away",
+  "wishing_fountain.advancements.set_sail.description": "「The world is not boring. It is you who bores yourself」",
+
+  "block.wishing_fountain.wishing_fountain": "Wishing Fountain",
+
+  "item.wishing_fountain.wf_biome_map": "§eBuddelschiff",
+  "item.wishing_fountain.wf_structure_map": "§eBuddelschiff",
+
+  "item.wishing_fountain.map.minecraft.jungle" : "Jungle Map",
+  "item.wishing_fountain.map.minecraft.mushroom_fields" : "mushroom Fields Map",
+
+  "item.wishing_fountain.map.minecraft.desert_pyramid" : "Desert Pyramid Map",
+
+  "wishing_fountain.sound.build": "Wishing Fountain Built",
+
+  "wishing_fountain.misc.only_one_map_searching": "There are already boats on the way!",
+  "wishing_fountain.misc.map_description": "§5A magical boat that will help you find your destination",
+  "wishing_fountain.misc.is_searching": ""
 }

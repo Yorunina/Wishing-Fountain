@@ -7,6 +7,7 @@ import io.github.poisonsheep.wishingfountain.tileentity.WFEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -39,7 +40,6 @@ public class WFMultiBlock implements IMultiBlock {
             new BlockPos(1, 0, 2)
     );
 
-
     @Override
     public boolean isCoreBlock(BlockState blockState) {
         return blockState.is(Blocks.QUARTZ_SLAB);
@@ -62,6 +62,7 @@ public class WFMultiBlock implements IMultiBlock {
     public void build(Level worldIn, BlockPos posStart, StructureTemplate wishingFountain, Direction direction) {
         StructureTemplate.Palette palette = wishingFountain.palettes.get(0);
         PosListData posList = new PosListData();
+        BlockPos center = posStart.offset(CENTER);
         //记录之前方块的位置
         for (StructureTemplate.StructureBlockInfo blockInfo : palette.blocks()) {
             posList.add(posStart.offset(blockInfo.pos()));
@@ -73,12 +74,16 @@ public class WFMultiBlock implements IMultiBlock {
             worldIn.setBlock(currentPos, targetState, Block.UPDATE_ALL);
             BlockEntity entity = worldIn.getBlockEntity(currentPos);
             if (entity instanceof WFEntity) {
-                boolean isRender = currentPos.equals(posStart.offset(CENTER));
+                boolean isRender = currentPos.equals(center);
                 boolean cnPlaceItem = targetState.getValue(WFBlock.FOUNTAIN).equals(2);
                 ((WFEntity) entity).setForgeData(isRender, cnPlaceItem, currentState, direction, posList);
             }
         }
-        worldIn.playSound(null, posStart.getX(), posStart.getY(), posStart.getZ(), SoundRegistry.BUILD.get(), SoundSource.BLOCKS, 1F, 1F);
+        worldIn.playSound(null, posStart, SoundRegistry.BUILD.get(), SoundSource.AMBIENT, 1F, 1F);
+        for (BlockPos bottomPos : getBottomPos()) {
+            BlockPos worldPos = posStart.offset(bottomPos);
+            ((ServerLevel) worldIn).sendParticles(ParticleTypes.CLOUD, worldPos.getX() + 0.5, worldPos.getY() + 1, worldPos.getZ() + 0.5, 10, 0, 0, 0, 0.1);
+        }
     }
 
     @Override

@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.RandomSource;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -14,10 +14,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 abstract class WFMapItem extends Item {
 
@@ -30,7 +34,6 @@ abstract class WFMapItem extends Item {
     protected static final String POS_LEG = "searchPosLeg";
     protected static final String POS_LEG_INDEX = "searchPosLegIndex";
     protected static final String DISTANCE = "distance";
-    protected static final String COLOR = "targetColor";
     protected static final String TARGET = "target";
     protected static int SEARCHING_RADIUS = 6400;
 
@@ -52,6 +55,7 @@ abstract class WFMapItem extends Item {
         handStack.getOrCreateTag().putDouble(SOURCE_X, pos.x);
         handStack.getOrCreateTag().putDouble(SOURCE_Z, pos.z);
         handStack.getOrCreateTag().putDouble(DISTANCE, Double.MAX_VALUE);
+        playSound(worldIn, player);
         return InteractionResultHolder.sidedSuccess(handStack, worldIn.isClientSide);
     }
 
@@ -65,12 +69,18 @@ abstract class WFMapItem extends Item {
                 } else {
                     player.getInventory().setItem(slot, runningStack);
                 }
-            } else {
-                if((stack.equals(player.getMainHandItem()) || stack.equals(player.getOffhandItem())) && worldIn.getGameTime() % 20 == 0 ) {
-                    RandomSource rand = worldIn.getRandom();
-                    player.playSound(SoundEvents.BOAT_PADDLE_WATER,1.0F, 1.2F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
-                }
             }
+            if((stack.equals(player.getMainHandItem()) || stack.equals(player.getOffhandItem())) && worldIn.getGameTime() % 20 == 0 ) {
+                worldIn.playSound(null, player.getOnPos(), SoundEvents.BOAT_PADDLE_WATER, SoundSource.PLAYERS, 1F, 1F);
+            }
+        }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> list, TooltipFlag flag) {
+        list.add(Component.translatable("wishing_fountain.misc.map_description"));
+        if(stack.getOrCreateTag().getBoolean(IS_SEARCHING)) {
+            list.add(Component.translatable("wishing_fountain.misc.is_searching"));
         }
     }
 
@@ -113,22 +123,18 @@ abstract class WFMapItem extends Item {
         return null;
     }
 
-    public ItemStack createMap(ServerLevel level, BlockPos targetPos, ResourceLocation target, ItemStack original) {
-        int color = getOverlayColor(original);
-        Component biomeComponent = Component.translatable(target.getNamespace() + "." + target.getPath());
+    public ItemStack createMap(ServerLevel level, BlockPos targetPos, ResourceLocation target) {
         ItemStack stack = MapItem.create(level, targetPos.getX(), targetPos.getZ(), (byte) 2, true, true);
         MapItem.renderBiomePreviewMap(level, stack);
         MapItemSavedData.addTargetDecoration(stack, targetPos, "+", MapDecoration.Type.RED_X);
-        stack.setHoverName(Component.translatable("item.wishing_fountain.map", biomeComponent));
-        stack.getOrCreateTagElement("display").putInt("MapColor", color);
+        stack.setHoverName(Component.translatable("item.wishing_fountain.map." + target.toString().replace(":", ".")));
         stack.getOrCreateTag().putBoolean(IS_SEARCHING, true);
         return stack;
     }
 
-    public static int getOverlayColor(ItemStack stack) {
-        return  stack.getOrCreateTag().getInt(COLOR);
-    }
-
     protected abstract ItemStack search(ItemStack stack, ServerLevel worldIn, Player player, int slot);
 
+    private void playSound(Level wordIn, Player player) {
+        wordIn.playSound(null, player.getOnPos(), SoundEvents.PLAYER_SPLASH, SoundSource.AMBIENT, 1F, 1F);
+    };
 }
