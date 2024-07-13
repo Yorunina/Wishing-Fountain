@@ -6,6 +6,8 @@ import io.github.poisonsheep.wishingfountain.registry.RecipeRegistry;
 import io.github.poisonsheep.wishingfountain.tileentity.WFEntity;
 import io.github.poisonsheep.wishingfountain.util.PosListData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -111,6 +113,7 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
         return InteractionResult.FAIL;
     }
 
+    @Override
     //弃用方法，不知道非弃用方法怎么搞
     public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entity) {
         if (!worldIn.isClientSide() && entity instanceof ItemEntity itemEntity && worldIn.getBlockEntity(pos) instanceof WFEntity wishingFountain) {
@@ -124,7 +127,6 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
             }
         }
     }
-
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
@@ -171,6 +173,7 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
         }
     }
 
+    //在喷泉里有物品实体将持续调用
     private void craft(Level worldIn, WFEntity entity, Player player) {
         final WFRecipeInventory inv = new WFRecipeInventory();
         List<BlockPos> posList = entity.getBlockPosList().getData();
@@ -190,15 +193,13 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
             }
         }
         Optional<WFRecipe> optionalRecipe = worldIn.getRecipeManager().getAllRecipesFor(RecipeRegistry.WF_RECIPE_TYPE).stream().filter(r -> r.matches(inv, worldIn)).findFirst();
-        optionalRecipe.ifPresent(r -> r.spawnOutputEntity(worldIn, player.getOnPos(), inv));
-        optionalRecipe.ifPresent(r -> removeIngredients(worldIn, inv, entity));
+        optionalRecipe.ifPresent(r -> r.spawnOutputEntity(worldIn, player.getOnPos()));
+        optionalRecipe.ifPresent(r -> removeIngredients(worldIn, inv, posList));
     }
 
-
-    private void removeIngredients(Level worldIn, WFRecipeInventory inv, WFEntity entity) {
+    private void removeIngredients(Level worldIn, WFRecipeInventory inv, List<BlockPos> posList) {
         for (ItemStack item : inv.items) {
             if(!item.isEmpty()) {
-                List<BlockPos> posList = entity.getBlockPosList().getData();
                 for (BlockPos pos : posList) {
                     BlockEntity te = worldIn.getBlockEntity(pos);
                     if (te instanceof WFEntity wfEntity) {
@@ -212,6 +213,11 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
                         }
                     }
                 }
+            }
+        }
+        for (BlockPos pos : posList) {
+            if(worldIn instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 10, 0, 0, 0, 0.1);
             }
         }
     }

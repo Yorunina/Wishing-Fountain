@@ -56,7 +56,7 @@ public class WFStructureMap extends WFMapItem{
             return stack;
         } else {
             BlockPos found = result.getObject();
-            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1F, 1F);
+            worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 1F, 1F);
             return createMap(worldIn, found, target);
         }
     }

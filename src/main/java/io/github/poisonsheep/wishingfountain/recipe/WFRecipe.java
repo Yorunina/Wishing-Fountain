@@ -8,8 +8,11 @@ import io.github.poisonsheep.wishingfountain.registry.RecipeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -19,7 +22,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.RecipeMatcher;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +38,14 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
         this.ingredients = ingredients;
     }
 
-    public void spawnOutputEntity(Level worldIn, BlockPos pos, @Nullable WFRecipeInventory inv) {
+    public void spawnOutputEntity(Level worldIn, BlockPos pos) {
         if(worldIn instanceof ServerLevel server) {
             ItemStack map = extractMap();
             ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY() + 2, pos.getZ(), map);
             itemEntity.setDefaultPickUpDelay();
             server.addFreshEntity(itemEntity);
+            server.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 10, 0, 0, 0, 0.1);
+            worldIn.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1F, 1F);
         }
     }
 

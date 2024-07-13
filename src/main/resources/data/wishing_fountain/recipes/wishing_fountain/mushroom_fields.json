@@ -1,0 +1,16 @@
+{
+  "type": "wishing_fountain:wishing_fountain_recipe",
+  "map_type": "biome",
+  "target": "minecraft:mushroom_fields",
+  "ingredients": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:red_mushroom"
+    },
+    {
+      "item": "minecraft:brown_mushroom"
+    }
+  ]
+}
