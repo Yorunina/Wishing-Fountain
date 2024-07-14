@@ -14,9 +14,9 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class WFModel extends EntityModel<Entity> {
+public class WFDefaultModel extends EntityModel<Entity> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(WishingFountain.MODID, "main"), "wishing_fountain");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(WishingFountain.MODID, "main"), "wishing_fountain_default_model");
 	private final ModelPart bone;
 	private final ModelPart bone9;
 	private final ModelPart bone2;
@@ -36,7 +36,7 @@ public class WFModel extends EntityModel<Entity> {
 	private final ModelPart bone17;
 	private final ModelPart bone18;
 
-	public WFModel(ModelPart root) {
+	public WFDefaultModel(ModelPart root) {
 		this.bone = root.getChild("bone");
 		this.bone9 = root.getChild("bone9");
 		this.bone2 = root.getChild("bone2");

@@ -60,7 +60,7 @@
  - 47.1.4  Change ProjectileHitEvent to return a result instead of being cancelable. Closes #9642
  - 47.1.3  Replace static import with regular one to fix S2S and non-official mappings. (#9633)
  - 47.1.2  Add missing null check for TagsProvider#existingFileHelper (#9638)
- - 47.1.1  Add GuiGraphics helpers for blitNineSliced and blitRepeating that support specifying a custom texture size (#9641)
+ - 47.1.1  Add GuiGraphics helpers for blitNineSliced and blitRepeating that support specifying a custom textureIndex size (#9641)
  - 47.1.0  1.20.1 Recommended Build
 
 47.0
@@ -192,7 +192,7 @@
  - 45.0.46 [1.19.4] Move root transform builder to ModelBuilder to allow use in ItemModelBuilder (#9456)
  - 45.0.45 Fix forge grindstone hooks allowing stacks of non-stackable items (#9457)
  - 45.0.44 [1.19.4] Fix FMLOnly (#9415)
- - 45.0.43 Fix ItemLayerModel erroneously adding particle texture to layer texture list (#9441)
+ - 45.0.43 Fix ItemLayerModel erroneously adding particle textureIndex to layer textureIndex list (#9441)
  - 45.0.42 Temporary fix for Canceling ProjectileImpactEvents of Piercing ammo.
            Event needs to be re-worked to have finer control. #9370
  - 45.0.41 Fix dummy air blocks not being marked as air (#9440)
@@ -233,7 +233,7 @@
  - 45.0.21 Fix JSON model root transforms (#9410)
  - 45.0.20 Fix tossed items not being able to be picked up by other players. Closes #9412 (#9404)
  - 45.0.19 Fix infinite BE render bounds failing frustum intersection test. Closes #9321 (#9407)
- - 45.0.18 Make ForgeSlider use the new vanilla texture (#9406)
+ - 45.0.18 Make ForgeSlider use the new vanilla textureIndex (#9406)
  - 45.0.17 Add BlockSetType#register to accesstransformer.cfg (#9386)
  - 45.0.16 Add option to completely hide a crash-callable depending on a runtime value (#9372)
  - 45.0.15 Add isNewChunk to ChunkEvent.Load (#9369)
@@ -319,12 +319,12 @@
  - 44.0.31 [1.19.3] Fix `retrieveRegistryLookup` attempting to get the registry lookup from a `HolderGetter` (#9225)
  - 44.0.30 [1.19.3] Add ability to datagen forge specific values in pack.mcmeta (#9221)
            Co-authored-by: sciwhiz12 <sciwhiz12@gmail.com>
- - 44.0.29 Add block atlas config to register forge:white texture (#9187)
+ - 44.0.29 Add block atlas config to register forge:white textureIndex (#9187)
  - 44.0.28 Fix ExtendedButton not being highlighted when focused (#9144)
  - 44.0.27 Separate checkAndFix from the check* tasks. (#9213)
  - 44.0.26 Fix forge resources overriding vanilla ones (#9222)
  - 44.0.25 Fix tooltip customization not working for creative inventory (#9218)
- - 44.0.24 Fix glowing item frame entity's texture (#9126)
+ - 44.0.24 Fix glowing item frame entity's textureIndex (#9126)
            Fixes #9123
  - 44.0.23 Fix datapack registries not being synced to clients (#9219)
  - 44.0.22 Fix creatives tabs rendering overlapping tabs if the selected tab isn't on the current page. (#9214)
@@ -538,7 +538,7 @@
  - 41.0.106 Allow modded blocks overriding canStickTo prevent sticking to vanilla blocks/other modded blocks (#8837)
  - 41.0.105 Multiple tweaks and fixes to the recent changes in the client refactor PR: Part 3 (#8864)
             Fix weighted baked models not respecting children render types
-            Allow fluid container model to use base texture as particle
+            Allow fluid container model to use base textureIndex as particle
             Fix inverted behavior in composite model building. Fixes #8871
  - 41.0.104 Fix crossbows not firing ArrowLooseEvent (#8887)
  - 41.0.103 Add User-Agent header to requests made by the update checker (#8881)
@@ -664,7 +664,7 @@
  - 41.0.67  Fix #8833 (#8835)
  - 41.0.66  Fix backwards fabulous check in SimpleBakedModel (#8832)
             Yet another blunder we missed during the review of #8786.
- - 41.0.65  Make texture atlas in StandaloneGeometryBakingContext configurable (#8831)
+ - 41.0.65  Make textureIndex atlas in StandaloneGeometryBakingContext configurable (#8831)
  - 41.0.64  [1.19.X] Client code cleanup, updates, and other refactors (#8786)
             * Revert "Allow safely registering RenderType predicates at any time (#8685)"
             This reverts commit be7275443fd939db9c58bcad47079c3767789ac1.
@@ -760,7 +760,7 @@
             * Add/update EXC entries and fix AT comment
             * Add test mod as per Orion's request
             * Additional requested changes
-            * Allow custom model types to request the particle texture to be loaded
+            * Allow custom model types to request the particle textureIndex to be loaded
             * Even more requested changes
             * Improve generics in ConcatenatedListView and add missing fallbacks
             * Fix fluid render types being bound to the fluid and not its holder
@@ -770,7 +770,7 @@
  - 41.0.63  Implement full support for IPv6 (#8742)
  - 41.0.62  Fix certain user-configured options being overwritten incorrectly due to validators. (#8780)
  - 41.0.61  Allow safely registering RenderType predicates at any time (#8685)
- - 41.0.60  Fix crash after loading error due to fluid texture gathering and config lookup (#8802)
+ - 41.0.60  Fix crash after loading error due to fluid textureIndex gathering and config lookup (#8802)
  - 41.0.59  Remove the configuration option for handling empty tags in ingredients. (#8799)
             Now empty tags are considered broken in all states.
  - 41.0.58  Fix MC-105317 Structure blocks do not rotate entities correctly when loading (#8792)

@@ -1,9 +1,9 @@
 package io.github.poisonsheep.wishingfountain.event;
 
 import io.github.poisonsheep.wishingfountain.WishingFountain;
-import io.github.poisonsheep.wishingfountain.advancement.AdvancementTriggerRegistry;
 import io.github.poisonsheep.wishingfountain.block.multiblock.IMultiBlock;
 import io.github.poisonsheep.wishingfountain.block.multiblock.MultiBlockManager;
+import io.github.poisonsheep.wishingfountain.registry.AdvancementTriggerRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

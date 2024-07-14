@@ -1,0 +1,29 @@
+{
+  "parent": "wishing_fountain:set_sail",
+  "display": {
+    "icon": {
+      "item": "wishing_fountain:monokuma_hard_disk"
+    },
+    "title": {
+      "translate": "wishing_fountain.advancements.despair_disease.title"
+    },
+    "description": {
+      "translate": "wishing_fountain.advancements.despair_disease.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "despair_disease": {
+      "trigger": "wishing_fountain:despair_disease",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "despair_disease"
+    ]
+  ]
+}

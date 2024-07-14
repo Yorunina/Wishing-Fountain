@@ -4,7 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.github.poisonsheep.wishingfountain.WishingFountain;
-import io.github.poisonsheep.wishingfountain.client.model.tileentity.WFModel;
+import io.github.poisonsheep.wishingfountain.client.model.tileentity.WFDefaultModel;
+import io.github.poisonsheep.wishingfountain.client.model.tileentity.WFMonokumaModel;
 import io.github.poisonsheep.wishingfountain.tileentity.WFEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,12 +24,17 @@ public class WFRender implements BlockEntityRenderer<WFEntity> {
 
     private final ItemRenderer itemRenderer;
 
-    private final WFModel MODEL;
+    private final WFDefaultModel DEFAULT_MODEL;
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WishingFountain.MODID, "textures/entity/wishing_fountain.png");
+    private final WFMonokumaModel MONOKUMA_MODEL;
+
+    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(WishingFountain.MODID, "textures/entity/default_wishing_fountain.png");
+
+    private static final ResourceLocation MONOKUMA_TEXTURE = new ResourceLocation(WishingFountain.MODID, "textures/entity/monokuma_wishing_fountain.png");
 
     public WFRender(BlockEntityRendererProvider.Context render) {
-        MODEL = new WFModel(render.bakeLayer(WFModel.LAYER_LOCATION));
+        DEFAULT_MODEL = new WFDefaultModel(render.bakeLayer(WFDefaultModel.LAYER_LOCATION));
+        MONOKUMA_MODEL = new WFMonokumaModel(render.bakeLayer(WFMonokumaModel.LAYER_LOCATION));
         Minecraft minecraft = Minecraft.getInstance();
         itemRenderer = minecraft.getItemRenderer();
     }
@@ -38,8 +44,13 @@ public class WFRender implements BlockEntityRenderer<WFEntity> {
             poseStack.pushPose();
             this.setTranslateAndPose(entity, poseStack);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-            VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(TEXTURE));
-            MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+            if(entity.getTextureIndex() == 0) {
+                VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(DEFAULT_TEXTURE));
+                DEFAULT_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+            } else if(entity.getTextureIndex() == 1) {
+                VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(MONOKUMA_TEXTURE));
+                MONOKUMA_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
             poseStack.popPose();
         }
         if (!entity.handler.getStackInSlot(0).isEmpty()) {

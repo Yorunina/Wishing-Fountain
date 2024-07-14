@@ -38,10 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
@@ -198,6 +195,7 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     }
 
     private void removeIngredients(Level worldIn, WFRecipeInventory inv, List<BlockPos> posList) {
+        Random rand = new Random(); // 创建一个新的随机数生成器
         for (ItemStack item : inv.items) {
             if(!item.isEmpty()) {
                 for (BlockPos pos : posList) {
@@ -217,10 +215,15 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
         }
         for (BlockPos pos : posList) {
             if(worldIn instanceof ServerLevel server) {
-                server.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 10, 0, 0, 0, 0.1);
+                for (int i = 0; i < 10; i++) {
+                    double xOffset = rand.nextGaussian() * 0.2; // 生成X轴偏移
+                    double zOffset = rand.nextGaussian() * 0.2; // 生成Z轴偏移
+                    server.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5 + xOffset, pos.getY() + 1.2, pos.getZ() + 0.5 + zOffset, 1, 0, 0, 0, 0.1);
+                }
             }
         }
     }
+
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateBuilder) {
