@@ -1,13 +1,13 @@
 {
   "type": "wishing_fountain:wishing_fountain_recipe",
-  "wish_type": "biome",
-  "target": "minecraft:jungle",
+  "wish_type": "weather",
+  "target": "rain",
   "ingredients": [
     {
       "item": "minecraft:emerald"
     },
     {
-      "item": "minecraft:melon_slice"
+      "item": "minecraft:blue_orchid"
     }
   ]
 }

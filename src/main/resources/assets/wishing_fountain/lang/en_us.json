@@ -1,14 +1,22 @@
 {
   "wishing_fountain.advancements.set_sail.title": "It’s better to burn out than to fade away",
   "wishing_fountain.advancements.set_sail.description": "「The world is not boring. It is you who bores yourself」",
+  "wishing_fountain.advancements.despair_disease.title": "Despair Disease",
+  "wishing_fountain.advancements.despair_disease.description": "Something has invaded the statue on Jabawak Island",
+  "wishing_fountain.advancements.dimension_tripper.title": "Dimension tripper!!!!",
+  "wishing_fountain.advancements.dimension_tripper.description": "Best encounter of the thousandfold bond",
 
   "block.wishing_fountain.wishing_fountain": "Wishing Fountain",
 
+  "itemGroup.wishing_fountain.main": "Wishing Fountain",
+
   "item.wishing_fountain.wf_biome_map": "§eBuddelschiff",
   "item.wishing_fountain.wf_structure_map": "§eBuddelschiff",
+  "item.wishing_fountain.monokuma_hard_disk": "Monokuma Thumb Drive",
+  "item.wishing_fountain.neps_decoration": "Nep's decoration",
 
   "item.wishing_fountain.map.minecraft.jungle" : "Jungle Map",
-  "item.wishing_fountain.map.minecraft.mushroom_fields" : "mushroom Fields Map",
+  "item.wishing_fountain.map.minecraft.mushroom_fields" : "Mushroom Fields Map",
 
   "item.wishing_fountain.map.minecraft.desert_pyramid" : "Desert Pyramid Map",
 
@@ -16,5 +24,9 @@
 
   "wishing_fountain.misc.only_one_map_searching": "There are already boats on the way!",
   "wishing_fountain.misc.map_description": "§5A magical boat that will help you find your destination",
-  "wishing_fountain.misc.is_searching": ""
+  "wishing_fountain.misc.is_searching": "searching",
+  "wishing_fountain.misc.monokuma_hard_disk_description": "§5Strange thumb drive. Maybe we can use it in the wishing fountain",
+  "wishing_fountain.misc.neps_decoration_description": "§5A cross-like hair decoration, maybe can be put on the statue  of the wishing fountain",
+
+  "jei.wishing_fountain.wf_recipe.title": "Make a Wish"
 }

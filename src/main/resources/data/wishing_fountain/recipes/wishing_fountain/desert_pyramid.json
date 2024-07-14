@@ -1,6 +1,6 @@
 {
   "type": "wishing_fountain:wishing_fountain_recipe",
-  "map_type": "structure",
+  "wish_type": "structure",
   "target": "minecraft:desert_pyramid",
   "ingredients": [
     {

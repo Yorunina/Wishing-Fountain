@@ -1,0 +1,29 @@
+{
+  "parent": "wishing_fountain:set_sail",
+  "display": {
+    "icon": {
+      "item": "wishing_fountain:neps_decoration"
+    },
+    "title": {
+      "translate": "wishing_fountain.advancements.dimension_tripper.title"
+    },
+    "description": {
+      "translate": "wishing_fountain.advancements.dimension_tripper.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "dimension_tripper": {
+      "trigger": "wishing_fountain:dimension_tripper",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "dimension_tripper"
+    ]
+  ]
+}

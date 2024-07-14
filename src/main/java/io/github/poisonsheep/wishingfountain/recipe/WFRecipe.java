@@ -27,23 +27,39 @@ import java.util.List;
 
 public class WFRecipe implements Recipe<WFRecipeInventory> {
     private final ResourceLocation id;
-    private final String mapType;
+    private final String wishType;
     private final String target;
     private final NonNullList<Ingredient> ingredients;
 
-    public WFRecipe(ResourceLocation id, String mapType, String target, NonNullList<Ingredient> ingredients) {
+    public WFRecipe(ResourceLocation id, String wishType, String target, NonNullList<Ingredient> ingredients) {
         this.id = id;
-        this.mapType = mapType;
+        this.wishType = wishType;
         this.target = target;
         this.ingredients = ingredients;
     }
 
     public void spawnOutputEntity(Level worldIn, BlockPos pos) {
         if(worldIn instanceof ServerLevel server) {
-            ItemStack map = extractMap();
-            ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY() + 2, pos.getZ(), map);
-            itemEntity.setDefaultPickUpDelay();
-            server.addFreshEntity(itemEntity);
+            if(wishType.equals("weather") && server.dimension() == Level.OVERWORLD) {
+                switch (target) {
+                    case "clear":
+                        server.setWeatherParameters(36000, 0, false, false);
+                        break;
+                    case "rain":
+                        server.setWeatherParameters(0, 36000, true, false);
+                        break;
+                    case "thunder":
+                        server.setWeatherParameters(0, 36000, true, true);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                ItemStack map = extractMap();
+                ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY() + 2, pos.getZ(), map);
+                itemEntity.setDefaultPickUpDelay();
+                server.addFreshEntity(itemEntity);
+            }
             server.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 10, 0, 0, 0, 0.1);
             worldIn.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1F, 1F);
         }
@@ -91,14 +107,19 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
 
     private ItemStack extractMap() {
         ItemStack map = ItemStack.EMPTY;
-        if(mapType.equals("biome")) {
+        if(wishType.equals("biome")) {
             map = new ItemStack(ItemRegistry.WF_BIOME_MAP.get());
             WFBiomeMapItem.setTarget(map, target);
-        } else if(mapType.equals("structure")) {
+        } else if(wishType.equals("structure")) {
             map = new ItemStack(ItemRegistry.WF_STRUCTURE_MAP.get());
             WFStructureMap.setTarget(map, target);
         }
         return map;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return ingredients;
     }
 
     @Override
@@ -117,7 +138,7 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
     }
 
     public String getMapType() {
-        return this.mapType;
+        return this.wishType;
     }
 
     public String getTarget() {

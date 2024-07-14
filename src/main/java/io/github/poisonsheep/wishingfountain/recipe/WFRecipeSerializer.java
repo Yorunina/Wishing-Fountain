@@ -14,7 +14,7 @@ public class WFRecipeSerializer implements RecipeSerializer<WFRecipe> {
 
     @Override
     public WFRecipe fromJson(ResourceLocation id, JsonObject json) {
-        String type = GsonHelper.getAsString(json, "map_type");
+        String type = GsonHelper.getAsString(json, "wish_type");
         String target = GsonHelper.getAsString(json, "target");
         NonNullList<Ingredient> ingredients = itemsFromJson(GsonHelper.getAsJsonArray(json, "ingredients"));
         return new WFRecipe(id,type, target, ingredients);

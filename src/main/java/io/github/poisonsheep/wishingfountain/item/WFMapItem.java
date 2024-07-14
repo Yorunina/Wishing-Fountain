@@ -1,5 +1,6 @@
 package io.github.poisonsheep.wishingfountain.item;
 
+import io.github.poisonsheep.wishingfountain.config.CommonConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -35,7 +36,6 @@ abstract class WFMapItem extends Item {
     protected static final String POS_LEG_INDEX = "searchPosLegIndex";
     protected static final String DISTANCE = "distance";
     protected static final String TARGET = "target";
-    protected static int SEARCHING_RADIUS = 6400;
 
     public WFMapItem() {
         super(new Item.Properties().stacksTo(1));
@@ -95,7 +95,7 @@ abstract class WFMapItem extends Item {
         int newX = cursor.getX();
         int newZ = cursor.getZ();
         int legSize = leg / 2 + 1;
-        int maxLegs = 4 * Math.floorDiv(SEARCHING_RADIUS, step);
+        int maxLegs = 4 * Math.floorDiv(CommonConfigs.SEARCHING_RADIUS.get(), step);
         if(legIndex >= legSize) {
             if(leg > maxLegs)
                 return null;

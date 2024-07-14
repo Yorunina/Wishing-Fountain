@@ -1,11 +1,19 @@
 {
   "wishing_fountain.advancements.set_sail.title": "与其凋零，不如燃烧",
-  "wishing_fountain.advancements.set_sail.description": "「不是这个世界无聊，而是你变成无聊的人!」",
+  "wishing_fountain.advancements.set_sail.description": "搭建一座许愿泉",
+  "wishing_fountain.advancements.despair_disease.title": "绝望症候群",
+  "wishing_fountain.advancements.despair_disease.description": "某种存在侵入了贾巴沃克岛的雕像",
+  "wishing_fountain.advancements.dimension_tripper.title": "Dimension tripper!!!!",
+  "wishing_fountain.advancements.dimension_tripper.description": "羁绊1000倍的最强邂逅",
 
   "block.wishing_fountain.wishing_fountain": "许愿泉",
 
+  "itemGroup.wishing_fountain.main": "许愿泉",
+
   "item.wishing_fountain.wf_biome_map": "§e瓶中船",
   "item.wishing_fountain.wf_structure_map": "§e瓶中船",
+  "item.wishing_fountain.monokuma_hard_disk": "黑白熊U盘",
+  "item.wishing_fountain.neps_decoration": "涅普的发饰",
 
   "item.wishing_fountain.map.minecraft.jungle" : "丛林地图",
   "item.wishing_fountain.map.minecraft.mushroom_fields" : "蘑菇岛地图",
@@ -16,5 +24,9 @@
 
   "wishing_fountain.misc.only_one_map_searching": "已经有小船在路上了！",
   "wishing_fountain.misc.map_description": "§5会帮你找到目的地的魔法小船",
-  "wishing_fountain.misc.is_searching": "正在寻找目的地"
+  "wishing_fountain.misc.is_searching": "正在寻找目的地",
+  "wishing_fountain.misc.monokuma_hard_disk_description": "§5奇怪的U盘，也许可以用在许愿池上",
+  "wishing_fountain.misc.neps_decoration_description": "§5十字样式的发饰，也许可以用来装饰许愿池上的女神像",
+
+  "jei.wishing_fountain.wf_recipe.title": "许愿"
 }

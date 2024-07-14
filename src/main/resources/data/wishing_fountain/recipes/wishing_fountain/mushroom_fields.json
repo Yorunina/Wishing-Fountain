@@ -1,6 +1,6 @@
 {
   "type": "wishing_fountain:wishing_fountain_recipe",
-  "map_type": "biome",
+  "wish_type": "biome",
   "target": "minecraft:mushroom_fields",
   "ingredients": [
     {

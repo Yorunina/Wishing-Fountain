@@ -33,11 +33,13 @@ public class WFEntity extends BlockEntity {
     private static final String IS_RENDER = "IsRender";
     private static final String DIRECTION = "Direction";
     private static final String CAN_PLACE_ITEM = "CanPlaceItem";
+    private static final String TEXTURE_INDEX = "TextureIndex";
     private BlockState storageState = Blocks.AIR.defaultBlockState();
     private PosListData blockPosList = new PosListData();
     private boolean isRender = false;
     private Direction direction = Direction.SOUTH;
     private boolean canPlaceItem = false;
+    private int textureIndex = 0;
     public final ItemStackHandler handler = new ItemStackHandler(1);
 
     public WFEntity(BlockPos pos, BlockState state) {
@@ -76,6 +78,7 @@ public class WFEntity extends BlockEntity {
         getPersistentData().putBoolean(IS_RENDER, isRender);
         getPersistentData().putBoolean(CAN_PLACE_ITEM, canPlaceItem);
         getPersistentData().putInt(STORAGE_STATE_ID, Block.getId(storageState));
+        getPersistentData().putInt(TEXTURE_INDEX, textureIndex);
         getPersistentData().putString(DIRECTION, direction.getSerializedName());
         getPersistentData().put(STORAGE_BLOCK_LIST, blockPosList.serialize());
         getPersistentData().put(STORAGE_ITEM, handler.serializeNBT());
@@ -88,6 +91,7 @@ public class WFEntity extends BlockEntity {
         isRender = getPersistentData().getBoolean(IS_RENDER);
         canPlaceItem = getPersistentData().getBoolean(CAN_PLACE_ITEM);
         storageState = Block.stateById(getPersistentData().getInt(STORAGE_STATE_ID));
+        textureIndex = getPersistentData().getInt(TEXTURE_INDEX);
         direction = Direction.byName(getPersistentData().getString(DIRECTION));
         blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_COMPOUND));
         handler.deserializeNBT(getPersistentData().getCompound(STORAGE_ITEM));
@@ -107,11 +111,19 @@ public class WFEntity extends BlockEntity {
     public boolean isRender() {
         return isRender;
     }
+
     public boolean isCanPlaceItem() {
         return canPlaceItem;
     }
 
     public Direction getDirection() {return direction;}
+
+    public int getTextureIndex() {return textureIndex;}
+
+    public void setTextureIndex(int textureIndex) {
+        this.textureIndex = textureIndex;
+        refresh();
+    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
