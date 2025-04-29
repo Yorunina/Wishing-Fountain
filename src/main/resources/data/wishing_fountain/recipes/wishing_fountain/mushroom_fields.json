@@ -4,13 +4,13 @@
   "target": "minecraft:mushroom_fields",
   "ingredients": [
     {
-      "item": "minecraft:emerald"
+      "item": "minecraft:brown_mushroom"
     },
     {
       "item": "minecraft:red_mushroom"
     },
     {
-      "item": "minecraft:brown_mushroom"
+      "item": "minecraft:emerald"
     }
   ]
 }

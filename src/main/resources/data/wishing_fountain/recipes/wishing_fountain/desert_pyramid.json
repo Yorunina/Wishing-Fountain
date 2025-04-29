@@ -4,13 +4,13 @@
   "target": "minecraft:desert_pyramid",
   "ingredients": [
     {
-      "item": "minecraft:emerald"
+      "item": "minecraft:sandstone"
     },
     {
       "item": "minecraft:gold_ingot"
     },
     {
-      "item": "minecraft:sandstone"
+      "item": "minecraft:emerald"
     }
   ]
 }

@@ -17,7 +17,7 @@ public class WFRecipeSerializer implements RecipeSerializer<WFRecipe> {
         String type = GsonHelper.getAsString(json, "wish_type");
         String target = GsonHelper.getAsString(json, "target");
         NonNullList<Ingredient> ingredients = itemsFromJson(GsonHelper.getAsJsonArray(json, "ingredients"));
-        return new WFRecipe(id,type, target, ingredients);
+        return new WFRecipe(id, type, target, ingredients);
     }
 
     @Override

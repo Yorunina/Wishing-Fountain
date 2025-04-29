@@ -151,10 +151,6 @@ public class WFBiomeMapItem extends WFMapItem {
         itemStack.getOrCreateTag().putString(TARGET, target);
     }
 
-    /*Key：这是一个记录类，它包含一个全局位置（GlobalPos）和一个结构的资源位置（ResourceLocation）。这个记录类被用作在并发搜索中唯一标识一个搜索任务的键。
-    RESULTS：这是一个并发哈希映射，它用于存储已经完成的搜索任务的结果。每个搜索任务的键是一个 Key 对象，值是一个 InteractionResultHolder<BlockPos> 对象，表示搜索的结果。
-    COMPUTING：这是一个并发哈希集合，它用于存储正在计算的搜索任务的键。当一个搜索任务开始时，它的键会被添加到这个集合中；当搜索任务完成时，它的键会被从这个集合中移除。
-    EXECUTORS：这是一个执行器服务，它用于执行并发搜索任务。这个执行器服务使用了一个缓存的线程池，这意味着它会为每个任务创建一个新的线程，如果有空闲的线程，它会重用这些线程。*/
     private record Key(GlobalPos pos, ResourceLocation target) {}
 
     private static final Map<Key, InteractionResultHolder<BlockPos>> RESULTS = new ConcurrentHashMap<>();
