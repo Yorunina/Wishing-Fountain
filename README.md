@@ -70,7 +70,11 @@ Wishing Fountain recipes support up to 8 input items and output a location-targe
 
 ## Important Notes
 
-- 📍 The Bottle Ship's search speed is moderate, but optimized to prevent server lag
+- ⚖️ The Bottle Ship's search speed is moderate, but optimized to prevent server lag
 
 - 🔥 Nether biomes/structures cannot be located - uses vanilla maps which don't support Nether
+
+- 📍 The maximum search radius is 10,000 grids. Exceeding the search radius will cause the buddelschiff to break
+
+
     

@@ -20,8 +20,8 @@ public class CommonConfigs {
 
         BUILDER.push("Buddelschiff Configs");
         SEARCHING_RADIUS = BUILDER
-                .comment("Maximum radius of buddelschiff search. DEFAULT: 6400")
-                .define("searching radius",6400);
+                .comment("Maximum radius of buddelschiff search. DEFAULT: 10000")
+                .define("searching radius",10000);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
