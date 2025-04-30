@@ -23,6 +23,17 @@ Throw a Heart of the Sea into the pool (trigger item can be modified via config)
 **Complete!**  
 ![accomplish](https://cdn.modrinth.com/data/mp9ceiLG/images/54bafa860e9dad842c86f7e9a21a88a1ef0867d0.png)
 
+### Construction Materials
+
+| Layer       | Material                       | Quantity |
+| ----------- | ------------------------------ | -------- |
+| **Layer 1** | Smooth Quartz Block            | 16       |
+|             | Waterlogged Smooth Quartz Slab | 8        |
+|             | Quartz Pillar                  | 1        |
+| **Layer 2** | Quartz Pillar                  | 1        |
+| **Layer 3** | Quartz Pillar                  | 1        |
+| **Layer 4** | Quartz Pillar                  | 1        |
+
 ---
 
 ## How to Make a Wish
