@@ -17,7 +17,7 @@ Wishing requires specific material combinations. A wish will only succeed if the
 ![3_step](https://cdn.modrinth.com/data/mp9ceiLG/images/5aa1adffca9e1933ab2f8e7b4b4244bed18d914c.png)
 
 **Step 4**  
-Throw a Heart of the Sea into the pool (trigger item can be modified via config)  
+Pour a bucket of water on the top then throw a Heart of the Sea into the pool (trigger item can be modified via config)  
 ![4_step](https://cdn.modrinth.com/data/mp9ceiLG/images/b273fb62f80f39212ea589ca92f4bc6dcdd15b0f.png)
 
 **Complete!**  
