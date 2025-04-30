@@ -42,7 +42,7 @@ public class WFMultiBlock implements IMultiBlock {
 
     @Override
     public boolean isCoreBlock(BlockState blockState) {
-        return blockState.is(Blocks.QUARTZ_SLAB);
+        return blockState.is(Blocks.SMOOTH_QUARTZ_SLAB);
     }
 
     @Override

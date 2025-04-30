@@ -17,8 +17,20 @@
 
   "item.wishing_fountain.map.minecraft.jungle" : "Jungle Map",
   "item.wishing_fountain.map.minecraft.mushroom_fields" : "Mushroom Fields Map",
+  "item.wishing_fountain.map.minecraft.dark_forest" : "Dark Forest Map",
+  "item.wishing_fountain.map.minecraft.flower_forest" : "Flower Forest Map",
+  "item.wishing_fountain.map.minecraft.ice_spikes" : "Ice Spikes Map",
+  "item.wishing_fountain.map.minecraft.savanna" : "Savanna Map",
+  "item.wishing_fountain.map.minecraft.swamp" : "Swamp Map",
+  "item.wishing_fountain.map.minecraft.warm_ocean" : "Warm Ocean Map",
 
   "item.wishing_fountain.map.minecraft.desert_pyramid" : "Desert Pyramid Map",
+  "item.wishing_fountain.map.minecraft.end_city" : "End City Map",
+  "item.wishing_fountain.map.minecraft.jungle_pyramid" : "Jungle Pyramid Map",
+  "item.wishing_fountain.map.minecraft.monument" : "Ocean Monument Map",
+  "item.wishing_fountain.map.minecraft.pillager_outpost" : "Pillager Outpost Map",
+  "item.wishing_fountain.map.minecraft.swamp_hut" : "Wamp Hut Map",
+  "item.wishing_fountain.map.minecraft.mansion" : "Woodland Mansion Map",
 
   "wishing_fountain.sound.build": "Wishing Fountain Built",
 

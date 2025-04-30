@@ -17,8 +17,20 @@
 
   "item.wishing_fountain.map.minecraft.jungle" : "丛林地图",
   "item.wishing_fountain.map.minecraft.mushroom_fields" : "蘑菇岛地图",
+  "item.wishing_fountain.map.minecraft.dark_forest" : "黑森林地图",
+  "item.wishing_fountain.map.minecraft.flower_forest" : "繁花森林地图",
+  "item.wishing_fountain.map.minecraft.ice_spikes" : "冰刺之地地图",
+  "item.wishing_fountain.map.minecraft.savanna" : "热带草原地图",
+  "item.wishing_fountain.map.minecraft.swamp" : "沼泽地图",
+  "item.wishing_fountain.map.minecraft.warm_ocean" : "暖水海洋地图",
 
   "item.wishing_fountain.map.minecraft.desert_pyramid" : "沙漠神殿地图",
+  "item.wishing_fountain.map.minecraft.end_city" : "末地城地图",
+  "item.wishing_fountain.map.minecraft.jungle_pyramid" : "丛林神庙地图",
+  "item.wishing_fountain.map.minecraft.monument" : "海底神殿地图",
+  "item.wishing_fountain.map.minecraft.pillager_outpost" : "掠夺者前哨站地图",
+  "item.wishing_fountain.map.minecraft.swamp_hut" : "沼泽小屋地图",
+  "item.wishing_fountain.map.minecraft.mansion" : "林地宅邸地图",
 
   "wishing_fountain.sound.build": "建造许愿泉",
 
