@@ -74,7 +74,7 @@ Wishing Fountain recipes support up to 8 input items and output a location-targe
 
 - 🔥 Nether biomes/structures cannot be located - uses vanilla maps which don't support Nether
 
-- 📍 The maximum search radius is 10,000 grids. Exceeding the search radius will cause the buddelschiff to break
+- 📍 The default maximum search radius is 10,000 grids. Exceeding the search radius will cause buddelschiff to break. Change this option in the configuration file
 
 
     
