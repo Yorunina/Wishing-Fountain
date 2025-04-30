@@ -1,6 +1,6 @@
 # Wishing Fountain Mod
 
-This mod adds a multiblock structure and two key items (Bottle Ship) that allow players to obtain location maps (for biomes or structures) through wishing, as well as change weather conditions.
+This mod adds a multiblock structure and two key items (Buddelschiff) that allow players to obtain location maps (for biomes or structures) through wishing, as well as change weather conditions.
 
 Wishing requires specific material combinations. A wish will only succeed if there's a corresponding recipe for the target. The mod includes default recipes for vanilla biomes and structures. Modpack authors need to create recipes for modded targets.
 
@@ -33,6 +33,7 @@ Throw a Heart of the Sea into the pool (trigger item can be modified via config)
 | **Layer 2** | Quartz Pillar                  | 1        |
 | **Layer 3** | Quartz Pillar                  | 1        |
 | **Layer 4** | Quartz Pillar                  | 1        |
+| **Layer 5** | Water                          | 1        |
 
 ---
 
@@ -43,7 +44,7 @@ Throw matching items into the pool (shapeless). Upon success, you'll receive a B
 ---
 
 ## How to Write a Recipe
-Wishing Fountain recipes support up to 8 input items and output a location-targeted Bottle Ship or weather change. Example recipe:
+Wishing Fountain recipes support up to 8 input items and output a location-targeted Buddelschiff or weather change. Example recipe:
 
 ```json
 {
