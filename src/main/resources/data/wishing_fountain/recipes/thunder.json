@@ -1,0 +1,13 @@
+{
+  "type": "wishing_fountain:wishing_fountain_recipe",
+  "wish_type": "weather",
+  "target": "thunder",
+  "ingredients": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:lily_pad"
+    }
+  ]
+}
