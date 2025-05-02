@@ -2,6 +2,7 @@ package io.github.poisonsheep.wishingfountain.recipe;
 
 import io.github.poisonsheep.wishingfountain.inventory.WFRecipeInventory;
 import io.github.poisonsheep.wishingfountain.item.WFBiomeMapItem;
+import io.github.poisonsheep.wishingfountain.item.WFLodsMap;
 import io.github.poisonsheep.wishingfountain.item.WFStructureMap;
 import io.github.poisonsheep.wishingfountain.registry.ItemRegistry;
 import io.github.poisonsheep.wishingfountain.registry.RecipeRegistry;
@@ -113,6 +114,9 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
         } else if(wishType.equals("structure")) {
             map = new ItemStack(ItemRegistry.WF_STRUCTURE_MAP.get());
             WFStructureMap.setTarget(map, target);
+        } else if(wishType.equals("adlods")) {
+            map = new ItemStack(ItemRegistry.WF_LODS_MAP.get());
+            WFLodsMap.setTarget(map, target);
         }
         return map;
     }
