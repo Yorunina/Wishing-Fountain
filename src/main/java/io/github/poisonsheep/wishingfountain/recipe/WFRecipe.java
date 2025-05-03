@@ -114,7 +114,7 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
         } else if(wishType.equals("structure")) {
             map = new ItemStack(ItemRegistry.WF_STRUCTURE_MAP.get());
             WFStructureMap.setTarget(map, target);
-        } else if(wishType.equals("adlods")) {
+        } else if(wishType.equals("lods")) {
             map = new ItemStack(ItemRegistry.WF_LODS_MAP.get());
             WFLodsMap.setTarget(map, target);
         }
