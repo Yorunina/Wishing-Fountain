@@ -1,0 +1,10 @@
+{
+  "type": "wishing_fountain:add_item_modifier",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:entities/wither"
+    }
+  ],
+  "item": "wishing_fountain:monokuma_hard_disk"
+}

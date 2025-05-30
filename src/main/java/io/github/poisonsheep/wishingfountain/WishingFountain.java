@@ -3,6 +3,7 @@ package io.github.poisonsheep.wishingfountain;
 import io.github.poisonsheep.wishingfountain.block.multiblock.MultiBlockManager;
 import io.github.poisonsheep.wishingfountain.config.CommonConfigs;
 import io.github.poisonsheep.wishingfountain.event.ForgeEvent;
+import io.github.poisonsheep.wishingfountain.loot.ModGlobalLootModifiers;
 import io.github.poisonsheep.wishingfountain.registry.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -21,7 +22,6 @@ public class WishingFountain {
     public static final IEventBus modBusEvent = FMLJavaModLoadingContext.get().getModEventBus();
 
     public final static String MODID = "wishing_fountain";
-    public static final String VERSION = "1.20.1-1.0.0";
 
     public WishingFountain(){
         MinecraftForge.EVENT_BUS.register(new ForgeEvent());
@@ -36,6 +36,7 @@ public class WishingFountain {
         SoundRegistry.SOUNDS.register(modBusEvent);
         RecipeRegistry.DEF_REG.register(modBusEvent);
         TabRegistry.TABS.register(modBusEvent);
+        ModGlobalLootModifiers.GLM.register(modBusEvent);
     }
     private void setup(final FMLCommonSetupEvent event) {
         AdvancementTriggerRegistry.register();

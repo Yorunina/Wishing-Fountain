@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.RecipeMatcher;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +57,8 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
                         break;
                 }
             } else {
-                ItemStack map = extractMap();
-                ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY() + 2, pos.getZ(), map);
+                ItemStack item = extractItem();
+                ItemEntity itemEntity = new ItemEntity(worldIn, pos.getX(), pos.getY() + 2, pos.getZ(), item);
                 itemEntity.setDefaultPickUpDelay();
                 server.addFreshEntity(itemEntity);
             }
@@ -102,19 +104,28 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return extractMap();
+        return extractItem();
     }
 
-    private ItemStack extractMap() {
-        ItemStack map = ItemStack.EMPTY;
+    private ItemStack extractItem() {
+        ItemStack itemStack = ItemStack.EMPTY;
         if(wishType.equals("biome")) {
-            map = new ItemStack(ItemRegistry.WF_BIOME_MAP.get());
-            WFBiomeMapItem.setTarget(map, target);
+            itemStack = new ItemStack(ItemRegistry.WF_BIOME_MAP.get());
+            WFBiomeMapItem.setTarget(itemStack, target);
         } else if(wishType.equals("structure")) {
-            map = new ItemStack(ItemRegistry.WF_STRUCTURE_MAP.get());
-            WFStructureMap.setTarget(map, target);
+            itemStack = new ItemStack(ItemRegistry.WF_STRUCTURE_MAP.get());
+            WFStructureMap.setTarget(itemStack, target);
+        } else if(wishType.equals("item")) {
+            ResourceLocation itemId = ResourceLocation.tryParse(target);
+            if (itemId != null) {
+                Item item = ForgeRegistries.ITEMS.getValue(itemId);
+                if (item != null) {
+                    return new ItemStack(item);
+                }
+            }
         }
-        return map;
+
+        return itemStack;
     }
 
     @Override
