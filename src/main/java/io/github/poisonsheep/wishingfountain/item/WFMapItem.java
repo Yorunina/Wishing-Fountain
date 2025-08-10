@@ -1,6 +1,7 @@
 package io.github.poisonsheep.wishingfountain.item;
 
 import io.github.poisonsheep.wishingfountain.config.CommonConfigs;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -36,6 +37,7 @@ abstract class WFMapItem extends Item {
     protected static final String POS_LEG_INDEX = "searchPosLegIndex";
     protected static final String DISTANCE = "distance";
     protected static final String TARGET = "target";
+    protected String type;
 
     public WFMapItem() {
         super(new Item.Properties().stacksTo(1));
@@ -81,6 +83,12 @@ abstract class WFMapItem extends Item {
         list.add(Component.translatable("wishing_fountain.misc.map_description"));
         if(stack.getOrCreateTag().getBoolean(IS_SEARCHING)) {
             list.add(Component.translatable("wishing_fountain.misc.is_searching"));
+        } else if(getTarget(stack) != null) {
+            if(Screen.hasShiftDown()) {
+                list.add(Component.translatable(type + "." + getTarget(stack).toString().replace(":", ".")));
+            } else {
+                list.add(Component.translatable("wishing_fountain.misc.shift_up"));
+            }
         }
     }
 
@@ -136,5 +144,19 @@ abstract class WFMapItem extends Item {
 
     private void playSound(Level wordIn, Player player) {
         wordIn.playSound(null, player.getOnPos(), SoundEvents.PLAYER_SPLASH, SoundSource.AMBIENT, 1F, 1F);
-    };
+    }
+
+    protected ResourceLocation getTarget(ItemStack stack) {
+        String tag = stack.getOrCreateTag().getString(TARGET);
+        if (tag.isEmpty()) {
+            return getDefaultTarget();
+        }
+        return new ResourceLocation(tag);
+    }
+
+    protected abstract ResourceLocation getDefaultTarget();
+
+    protected String getType() {
+        return type;
+    }
 }

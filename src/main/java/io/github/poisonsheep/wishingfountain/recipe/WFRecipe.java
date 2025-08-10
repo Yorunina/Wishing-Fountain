@@ -42,7 +42,7 @@ public class WFRecipe implements Recipe<WFRecipeInventory> {
 
     public void spawnOutputEntity(Level worldIn, BlockPos pos) {
         if(worldIn instanceof ServerLevel server) {
-            if(wishType.equals("weather") && server.dimension() == Level.OVERWORLD) {
+            if(wishType.equals("weather")) {
                 switch (target) {
                     case "clear":
                         server.setWeatherParameters(36000, 0, false, false);
