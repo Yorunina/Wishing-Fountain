@@ -111,7 +111,6 @@ public class WFBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     }
 
     @Override
-    //弃用方法，不知道非弃用方法怎么搞
     public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entity) {
         if (!worldIn.isClientSide() && entity instanceof ItemEntity itemEntity && worldIn.getBlockEntity(pos) instanceof WFEntity wishingFountain) {
             if(wishingFountain.isCanPlaceItem()) {

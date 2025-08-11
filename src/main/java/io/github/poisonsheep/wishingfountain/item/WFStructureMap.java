@@ -29,6 +29,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class WFStructureMap extends WFMapItem{
+    private final ResourceLocation target_structure = BuiltinStructures.END_CITY.location();
+
+    public WFStructureMap() {
+        super();
+        type = "structure";
+    }
+
+    @Override
+    protected ResourceLocation getDefaultTarget() {
+        return target_structure;
+    }
 
     @Override
     protected ItemStack search(ItemStack stack, ServerLevel worldIn, Player player, int slot) {
@@ -59,14 +70,6 @@ public class WFStructureMap extends WFMapItem{
             worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 1F, 1F);
             return createMap(worldIn, found, target);
         }
-    }
-
-    protected ResourceLocation getTarget(ItemStack stack) {
-        String tagStructure = stack.getOrCreateTag().getString(TARGET);
-        if(tagStructure.isEmpty()) {
-            return BuiltinStructures.END_CITY.location();
-        }
-        return new ResourceLocation(tagStructure);
     }
 
     private InteractionResultHolder<BlockPos> concurrentSearch(ServerLevel worldIn, ItemStack stack, BlockPos pos, StructurePlacement placement, Structure structure) {

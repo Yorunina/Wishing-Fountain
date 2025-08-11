@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -27,14 +26,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class WFBiomeMapItem extends WFMapItem {
+    private final ResourceLocation target_biome = Biomes.MUSHROOM_FIELDS.location();
 
-    protected ResourceLocation getTarget(ItemStack stack) {
-        String tagBiome = stack.getOrCreateTag().getString(TARGET);
-        if(tagBiome.isEmpty()) {
-            ResourceKey<Biome> biome = Biomes.MUSHROOM_FIELDS;
-            return biome.location();
-        }
-        return new ResourceLocation(tagBiome);
+    public WFBiomeMapItem() {
+        super();
+        type = "biome";
+    }
+
+    @Override
+    protected ResourceLocation getDefaultTarget() {
+            return target_biome;
     }
 
     @Override
