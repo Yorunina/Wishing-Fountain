@@ -51,7 +51,6 @@ abstract class WFMapItem extends Item {
             player.displayClientMessage(Component.translatable("wishing_fountain.misc.only_one_map_searching"), true);
             return InteractionResultHolder.fail(handStack);
         }
-        //不清楚getTag()和getOrCreateTag()有啥区别
         Vec3 pos = player.getPosition(1F);
         handStack.getOrCreateTag().putBoolean(IS_SEARCHING, true);
         handStack.getOrCreateTag().putDouble(SOURCE_X, pos.x);
@@ -85,7 +84,7 @@ abstract class WFMapItem extends Item {
             list.add(Component.translatable("wishing_fountain.misc.is_searching"));
         } else if(getTarget(stack) != null) {
             if(Screen.hasShiftDown()) {
-                list.add(Component.translatable(type + "." + getTarget(stack).toString().replace(":", ".")));
+                list.add(Component.translatable(getType() + "." + getTarget(stack).toString().replace(":", ".")));
             } else {
                 list.add(Component.translatable("wishing_fountain.misc.shift_up"));
             }
@@ -135,7 +134,8 @@ abstract class WFMapItem extends Item {
         ItemStack stack = MapItem.create(level, targetPos.getX(), targetPos.getZ(), (byte) 2, true, true);
         MapItem.renderBiomePreviewMap(level, stack);
         MapItemSavedData.addTargetDecoration(stack, targetPos, "+", MapDecoration.Type.RED_X);
-        stack.setHoverName(Component.translatable("item.wishing_fountain.map." + target.toString().replace(":", ".")));
+        // 这里不能用getTarget而是用参数传入，是因为生成的地图并没有标签
+        stack.setHoverName(Component.translatable("wishing_fountain.misc.map", Component.translatable(getType() + "." + target.toString().replace(":", "."))));
         stack.getOrCreateTag().putBoolean(IS_SEARCHING, true);
         return stack;
     }
